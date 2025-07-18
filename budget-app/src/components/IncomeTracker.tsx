@@ -3,21 +3,23 @@ import { db, auth } from '../firebase';
 import { collection, addDoc, query, where, serverTimestamp, deleteDoc, doc } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
-function ExpenseTracker() {
+function IncomeTracker() {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
 
-  const expensesRef = collection(db, 'expenses');
-  const q = auth.currentUser ? query(expensesRef, where('userId', '==', auth.currentUser.uid)) : query(expensesRef);
-  const [expensesSnapshot, loading, error] = useCollection(q);
+  // Reference to the 'income' collection
+  const incomeRef = collection(db, 'income');
+  // Query for the current user's income
+  const q = auth.currentUser ? query(incomeRef, where('userId', '==', auth.currentUser.uid)) : query(incomeRef);
+  const [incomeSnapshot, loading, error] = useCollection(q);
 
-  // --- NEW: Calculate the total expenses ---
-  const totalExpenses = expensesSnapshot?.docs.reduce(
+  // Calculate the total income
+  const totalIncome = incomeSnapshot?.docs.reduce(
     (total, doc) => total + doc.data().amount,
     0
   );
 
-  const handleAddExpense = async (e: React.FormEvent) => {
+  const handleAddIncome = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
@@ -25,8 +27,9 @@ function ExpenseTracker() {
       return;
     }
     if (!auth.currentUser) return;
+
     try {
-      await addDoc(expensesRef, {
+      await addDoc(incomeRef, {
         description: description,
         amount: parsedAmount,
         createdAt: serverTimestamp(),
@@ -35,29 +38,28 @@ function ExpenseTracker() {
       setDescription('');
       setAmount('');
     } catch (err) {
-      console.error("Error adding expense: ", err);
+      console.error("Error adding income: ", err);
     }
   };
 
-  const handleDeleteExpense = async (id: string) => {
+  const handleDeleteIncome = async (id: string) => {
     try {
-      const expenseDocRef = doc(db, 'expenses', id);
-      await deleteDoc(expenseDocRef);
+      const incomeDocRef = doc(db, 'income', id);
+      await deleteDoc(incomeDocRef);
     } catch (err) {
-      console.error("Error deleting expense: ", err);
+      console.error("Error deleting income: ", err);
     }
   };
 
   return (
     <div>
-      <h3>Add Expense</h3>
-      <form onSubmit={handleAddExpense}>
-        {/* Form inputs remain the same */}
+      <h3>Add Income</h3>
+      <form onSubmit={handleAddIncome}>
         <input
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Expense description"
+          placeholder="Income source"
           required
         />
         <input
@@ -67,22 +69,21 @@ function ExpenseTracker() {
           placeholder="Amount"
           required
         />
-        <button type="submit">Add Expense</button>
+        <button type="submit">Add Income</button>
       </form>
 
       <hr />
 
-      {/* --- NEW: Display the total --- */}
-      <h2>Total Expenses: ${totalExpenses?.toFixed(2)}</h2>
+      <h2>Total Income: ${totalIncome?.toFixed(2)}</h2>
 
-      <h3>Your Expenses</h3>
-      {loading && <p>Loading expenses...</p>}
-      {error && <p>Error loading expenses.</p>}
+      <h3>Your Income Sources</h3>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error loading income.</p>}
       <ul>
-        {expensesSnapshot?.docs.map(doc => (
+        {incomeSnapshot?.docs.map(doc => (
           <li key={doc.id}>
             {doc.data().description}: ${doc.data().amount.toFixed(2)}
-            <button onClick={() => handleDeleteExpense(doc.id)} style={{ marginLeft: '10px' }}>
+            <button onClick={() => handleDeleteIncome(doc.id)} style={{ marginLeft: '10px' }}>
               Delete
             </button>
           </li>
@@ -92,4 +93,4 @@ function ExpenseTracker() {
   );
 }
 
-export default ExpenseTracker;
+export default IncomeTracker;
