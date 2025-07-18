@@ -1,6 +1,7 @@
 // src/components/BudgetComparison.tsx
 
 import type { DocumentData, QuerySnapshot } from 'firebase/firestore';
+import Card from '../../components/Card';
 
 interface BudgetComparisonProps {
   budgetsSnapshot: QuerySnapshot<DocumentData, DocumentData> | undefined;
@@ -18,15 +19,14 @@ function BudgetComparison({ budgetsSnapshot, expensesSnapshot }: BudgetCompariso
     const category = doc.data().category || 'Uncategorized';
     acc[category] = (acc[category] || 0) + doc.data().amount;
     return acc;
-  }, {} as { [key: string]: number });
+  }, {} as { [key: string]: number }) || {};
 
   if (!budgets || Object.keys(budgets).length === 0) {
     return <h4>You haven't set any budgets yet.</h4>;
   }
 
   return (
-    <div className="tracker-container">
-      <h3>Budget vs. Actual Spending</h3>
+    <Card title="Budget vs. Actual Spending">
       <ul>
         {Object.entries(budgets).map(([category, budgetAmount]) => {
           const spentAmount = spending[category] || 0;
@@ -65,7 +65,7 @@ function BudgetComparison({ budgetsSnapshot, expensesSnapshot }: BudgetCompariso
           );
         })}
       </ul>
-    </div>
+    </Card>
   );
 }
 

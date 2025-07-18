@@ -1,21 +1,19 @@
 // src/components/BudgetManager.tsx
 
 import React, { useState } from 'react';
-import { db, auth } from '../firebase';
-import { collection, addDoc, query, where, serverTimestamp, doc, setDoc } from 'firebase/firestore';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { db, auth } from '../../services/firebase';
+import { serverTimestamp, doc, setDoc } from 'firebase/firestore';
+import useFirestoreCollection from '../../hooks/useFirestoreCollection';
+import Card from '../../components/Card';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 const categories = ["Food", "Transport", "Housing", "Utilities", "Entertainment", "Other"];
 
 function BudgetManager() {
+  const { snapshot: budgetsSnapshot, loading, error } = useFirestoreCollection('budgets');
   const [category, setCategory] = useState('Food');
   const [budgetAmount, setBudgetAmount] = useState('');
-
-  // Reference to the 'budgets' collection
-  const budgetsRef = collection(db, 'budgets');
-  // Query for the current user's budgets
-  const q = auth.currentUser ? query(budgetsRef, where('userId', '==', auth.currentUser.uid)) : query(budgetsRef);
-  const [budgetsSnapshot, loading, error] = useCollection(q);
 
   const handleSetBudget = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,8 +25,6 @@ function BudgetManager() {
     if (!auth.currentUser) return;
 
     try {
-      // Use the category name as the document ID for simplicity
-      // This ensures one budget per category for each user
       const budgetDocRef = doc(db, 'budgets', `${auth.currentUser.uid}_${category}`);
       await setDoc(budgetDocRef, {
         category: category,
@@ -43,20 +39,19 @@ function BudgetManager() {
   };
 
   return (
-    <div className="tracker-container">
-      <h3>Set Your Budgets</h3>
+    <Card title="Set Your Budgets">
       <form onSubmit={handleSetBudget}>
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
         </select>
-        <input
+        <Input
           type="number"
           value={budgetAmount}
           onChange={(e) => setBudgetAmount(e.target.value)}
           placeholder="Budget Amount"
           required
         />
-        <button type="submit">Set Budget</button>
+        <Button type="submit">Set Budget</Button>
       </form>
 
       <hr />
@@ -72,7 +67,7 @@ function BudgetManager() {
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   );
 }
 

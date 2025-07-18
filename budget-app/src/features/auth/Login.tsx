@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../../services/firebase';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import Card from '../../components/Card';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -18,29 +21,28 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <Card title="Login">
       <form onSubmit={handleLogin}>
-        <input
+        <Input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           required
         />
-        <input
+        <Input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
         />
-        <button type="submit">Login</button>
+        <Button type="submit">Login</Button>
       </form>
       <p>
         Don't have an account? <Link to="/register">Register here</Link>.
       </p>
-    </div>
+    </Card>
   );
 }
 
