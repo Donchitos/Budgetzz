@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { db, auth } from '../../services/firebase';
 import { collection, addDoc, serverTimestamp, deleteDoc, doc } from 'firebase/firestore';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';

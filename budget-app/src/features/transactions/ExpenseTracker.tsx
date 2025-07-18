@@ -1,6 +1,4 @@
-// src/components/ExpenseTracker.tsx
-
-import React from 'react';
+// src/features/transactions/ExpenseTracker.tsx
 import { db, auth } from '../../services/firebase';
 import { collection, addDoc, serverTimestamp, deleteDoc, doc } from 'firebase/firestore';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
