@@ -9,12 +9,14 @@ import {
   updateDoc,
   query,
   where,
-  getDocs
+  getDocs,
+  getDoc
 } from "firebase/firestore";
 import { db, auth } from "./firebase";
 import { generateBudgetId, getCurrentMonth } from "../utils/dateUtils";
 import { calculateNextDueDate } from "../types/recurringUtils";
 import type { RecurringTransaction, FrequencyType } from "../types";
+import type { AlertRule, UserNotificationPreference } from "../types/alerts";
 
 // Transactions
 export const addTransaction = async (
@@ -237,4 +239,50 @@ export const autoGenerateAllDueTransactions = async () => {
   await generateMultipleTransactionsFromRecurring(dueTransactions);
   
   return dueTransactions.length;
+};
+
+// Alert Rules
+export const addAlertRule = async (rule: Omit<AlertRule, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) => {
+  if (!auth.currentUser) throw new Error("User not authenticated");
+  const collectionRef = collection(db, "alertRules");
+  await addDoc(collectionRef, {
+    ...rule,
+    userId: auth.currentUser.uid,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const updateAlertRule = async (id: string, updates: Partial<AlertRule>) => {
+  const docRef = doc(db, "alertRules", id);
+  await updateDoc(docRef, {
+    ...updates,
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const deleteAlertRule = async (id: string) => {
+  const docRef = doc(db, "alertRules", id);
+  await deleteDoc(docRef);
+};
+
+// Notification Preferences
+export const getUserNotificationPreferences = async (): Promise<UserNotificationPreference | null> => {
+  if (!auth.currentUser) throw new Error("User not authenticated");
+  const docRef = doc(db, "userNotificationPreferences", auth.currentUser.uid);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() } as UserNotificationPreference;
+  }
+  return null;
+};
+
+export const setUserNotificationPreferences = async (preferences: Partial<UserNotificationPreference>) => {
+  if (!auth.currentUser) throw new Error("User not authenticated");
+  const docRef = doc(db, "userNotificationPreferences", auth.currentUser.uid);
+  await setDoc(docRef, {
+    ...preferences,
+    userId: auth.currentUser.uid,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
 };
