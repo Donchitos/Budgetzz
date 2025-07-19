@@ -10,13 +10,16 @@ import BudgetComparison from "../../features/budget/BudgetComparison";
 import RecurringTransactionManager from "../../features/recurring/RecurringTransactionManager";
 import DueTransactionsReview from "../../features/recurring/DueTransactionsReview";
 import UpcomingTransactions from "../../features/recurring/UpcomingTransactions";
+import GoalsManager from '../goals/GoalsManager';
+import GoalsSummaryWidget from '../goals/GoalsSummaryWidget';
+import SmartGoalSuggestions from '../goals/SmartGoalSuggestions';
 import PeriodSelector from "../../components/PeriodSelector";
 import Button from "../../components/Button";
 import { getCurrentMonth } from "../../utils/dateUtils";
 import { useData } from "../../hooks/useData";
 import "./Dashboard.css";
 
-type TabType = 'overview' | 'recurring' | 'budgets' | 'transactions';
+type TabType = 'overview' | 'recurring' | 'budgets' | 'transactions' | 'goals';
 
 function Dashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState<Date>(getCurrentMonth());
@@ -113,6 +116,7 @@ function Dashboard() {
       }}>
         <TabButton tab="overview" label="Overview">📊</TabButton>
         <TabButton tab="recurring" label="Recurring">🔄</TabButton>
+        <TabButton tab="goals" label="Goals">🏆</TabButton>
         <TabButton tab="budgets" label="Budgets">🎯</TabButton>
         <TabButton tab="transactions" label="Transactions">💰</TabButton>
       </div>
@@ -134,6 +138,14 @@ function Dashboard() {
             
             <div style={{ marginBottom: '30px' }}>
               <UpcomingTransactions daysAhead={14} />
+            </div>
+
+            <div style={{ marginBottom: '30px' }}>
+              <GoalsSummaryWidget />
+            </div>
+
+            <div style={{ marginBottom: '30px' }}>
+              <SmartGoalSuggestions />
             </div>
             
             <div className="dashboard-grid">
@@ -180,6 +192,10 @@ function Dashboard() {
               <UpcomingTransactions daysAhead={30} />
             </div>
           </div>
+        )}
+
+        {activeTab === 'goals' && (
+          <GoalsManager />
         )}
 
         {activeTab === 'budgets' && (
