@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Rule for the 'expenses' collection
+    match /expenses/{expenseId} {
+      allow read, update, delete: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+
+    // Rule for the 'income' collection
+    match /income/{incomeId} {
+      allow read, update, delete: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+    
+    // CORRECTED Rule for the 'budgets' collection
+    match /budgets/{budgetId} {
+       allow read, update, delete: if request.auth.uid == resource.data.userId;
+       allow create: if request.auth.uid == request.resource.data.userId;
+    }
+
+    // Rule for the 'recurring-transactions' collection
+    match /recurring-transactions/{transactionId} {
+      allow read, update, delete: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+  }
+}

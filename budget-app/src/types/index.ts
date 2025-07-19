@@ -1,3 +1,4 @@
+// src/types/index.ts
 import { Timestamp } from "firebase/firestore";
 
 export interface Transaction {
@@ -7,6 +8,7 @@ export interface Transaction {
   category?: string;
   createdAt: Timestamp | Date;
   userId: string;
+  recurringId?: string; // Link to recurring transaction if auto-generated
 }
 
 export interface Budget {
@@ -21,4 +23,34 @@ export interface Budget {
 export interface DateRange {
   start: Date;
   end: Date;
+}
+
+export type FrequencyType = 'weekly' | 'bi-weekly' | 'monthly' | 'yearly';
+
+export interface RecurringTransaction {
+  id: string;
+  type: 'income' | 'expense';
+  description: string;
+  amount: number;
+  category?: string; // Only for expenses
+  frequency: FrequencyType;
+  startDate: Timestamp | Date;
+  endDate?: Timestamp | Date; // Optional - if not set, continues indefinitely
+  isActive: boolean;
+  nextDueDate: Timestamp | Date;
+  userId: string;
+  createdAt: Timestamp | Date;
+  updatedAt: Timestamp | Date;
+}
+
+export interface PendingTransaction {
+  id: string;
+  recurringId: string;
+  type: 'income' | 'expense';
+  description: string;
+  amount: number;
+  category?: string;
+  scheduledDate: Date;
+  isReviewed: boolean;
+  userId: string;
 }

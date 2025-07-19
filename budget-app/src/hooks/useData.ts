@@ -1,9 +1,11 @@
+// src/hooks/useData.ts
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection, query, where } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
 import { useMemo } from "react";
 import { isDateInRange, getMonthRange } from "../utils/dateUtils";
-import type { Transaction, Budget } from "../types";
+import { getDueRecurringTransactions } from "../types/recurringUtils";
+import type { Transaction, Budget, RecurringTransaction } from "../types";
 
 const useFirestoreCollection = (collectionName: string) => {
   const collectionRef = collection(db, collectionName);
@@ -20,13 +22,14 @@ const useFirestoreCollection = (collectionName: string) => {
     }));
   }, [snapshot]);
 
-  return { data, loading, error };
+  return { data, loading, error, snapshot };
 };
 
 export const useData = (selectedPeriod: Date) => {
   const { data: income, loading: incomeLoading, error: incomeError } = useFirestoreCollection("income");
   const { data: expenses, loading: expensesLoading, error: expensesError } = useFirestoreCollection("expenses");
   const { data: budgets, loading: budgetsLoading, error: budgetsError } = useFirestoreCollection("budgets");
+  const { data: recurringTransactions, loading: recurringLoading, error: recurringError } = useFirestoreCollection("recurring-transactions");
 
   const dateRange = getMonthRange(selectedPeriod);
 
@@ -56,6 +59,11 @@ export const useData = (selectedPeriod: Date) => {
     [budgets, selectedPeriod]
   );
 
+  const dueRecurringTransactions = useMemo(
+    () => getDueRecurringTransactions(recurringTransactions as RecurringTransaction[]),
+    [recurringTransactions]
+  );
+
   const totalIncome = useMemo(
     () => filteredIncome.reduce((sum, item) => sum + item.amount, 0),
     [filteredIncome]
@@ -66,13 +74,31 @@ export const useData = (selectedPeriod: Date) => {
     [filteredExpenses]
   );
 
+  const totalRecurringIncome = useMemo(
+    () => (recurringTransactions as RecurringTransaction[])
+      .filter(rt => rt.isActive && rt.type === 'income')
+      .reduce((sum, rt) => sum + rt.amount, 0),
+    [recurringTransactions]
+  );
+
+  const totalRecurringExpenses = useMemo(
+    () => (recurringTransactions as RecurringTransaction[])
+      .filter(rt => rt.isActive && rt.type === 'expense')
+      .reduce((sum, rt) => sum + rt.amount, 0),
+    [recurringTransactions]
+  );
+
   return {
     income: filteredIncome,
     expenses: filteredExpenses,
     budgets: filteredBudgets,
+    recurringTransactions: recurringTransactions as RecurringTransaction[],
+    dueRecurringTransactions,
     totalIncome,
     totalExpenses,
-    loading: incomeLoading || expensesLoading || budgetsLoading,
-    error: incomeError || expensesError || budgetsError,
+    totalRecurringIncome,
+    totalRecurringExpenses,
+    loading: incomeLoading || expensesLoading || budgetsLoading || recurringLoading,
+    error: incomeError || expensesError || budgetsError || recurringError,
   };
 };
