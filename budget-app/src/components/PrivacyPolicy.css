@@ -1,0 +1,27 @@
+.privacy-policy-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.privacy-policy-container h2 {
+  color: var(--primary-green);
+  border-bottom: 2px solid var(--neutral-gray-light);
+  padding-bottom: 10px;
+  margin-top: 30px;
+}
+
+.privacy-policy-container p,
+.privacy-policy-container li {
+  line-height: 1.6;
+  color: var(--neutral-gray-dark);
+}
+
+.privacy-policy-container a {
+  color: var(--primary-green);
+  text-decoration: none;
+}
+
+.privacy-policy-container a:hover {
+  text-decoration: underline;
+}

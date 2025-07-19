@@ -71,6 +71,21 @@ export const deleteBudget = async (id: string) => {
   await deleteDoc(budgetDocRef);
 };
 
+export const addBudget = async (category: string, budgetAmount: number, month: number, year: number) => {
+  if (!auth.currentUser) throw new Error("User not authenticated");
+  const budgetId = generateBudgetId(auth.currentUser.uid, category, new Date(year, month - 1));
+  const budgetDocRef = doc(db, "budgets", budgetId);
+  await setDoc(budgetDocRef, {
+    category,
+    budgetAmount,
+    userId: auth.currentUser.uid,
+    month: month - 1,
+    year,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+};
+
 // Recurring Transactions
 export const createRecurringTransaction = async (
   type: 'income' | 'expense',

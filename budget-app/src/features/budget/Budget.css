@@ -9,16 +9,42 @@
   flex: 1;
 }
 
+.existing-budget-info {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.budget-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.no-budgets-message {
+  color: var(--neutral-gray-dark);
+  font-style: italic;
+}
+
 .budget-list {
   list-style: none;
   padding: 0;
+  margin-top: 10px;
 }
 
 .budget-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.budget-item:last-child {
+  border-bottom: none;
 }
 
 .budget-item .category {
@@ -26,7 +52,14 @@
 }
 
 .budget-item .amount {
-  margin-left: 10px;
+  color: var(--primary-green);
+  font-weight: bold;
+}
+
+.delete-button {
+  background-color: var(--primary-red) !important;
+  font-size: 0.8em !important;
+  padding: 5px 10px !important;
 }
 
 .budget-comparison .summary {
@@ -57,15 +90,15 @@
 }
 
 .budget-comparison .summary .total-spent .value {
-  color: #dc3545;
+  color: var(--primary-red);
 }
 
 .budget-comparison .summary .remaining .value.positive {
-  color: #28a745;
+  color: var(--primary-green);
 }
 
 .budget-comparison .summary .remaining .value.negative {
-  color: #dc3545;
+  color: var(--primary-red);
 }
 
 .category-breakdown {

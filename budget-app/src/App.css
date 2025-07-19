@@ -1,91 +1,33 @@
-/* src/App.css */
-
-/* --- General & Form Styling --- */
-h1, h2, h3 {
-  color: #2c3e50;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
-}
-
-form {
+.app-container {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1em;
-  flex-grow: 1; /* Allow input to grow */
-}
-
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  background-color: #3498db;
-  color: white;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #2980b9;
-}
-
-/* --- Logout & Delete Buttons --- */
-button[onClick*="handleLogout"] {
-  background-color: #e74c3c;
-}
-button[onClick*="handleLogout"]:hover {
-  background-color: #c0392b;
-}
-button[onClick*="handleDeleteExpense"] {
-  background-color: #95a5a6;
-  padding: 5px 10px;
-  font-size: 0.8em;
-}
-button[onClick*="handleDeleteExpense"]:hover {
-  background-color: #7f8c8d;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 40px 0;
-}
-
-/* --- Expense List --- */
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
-
-li:last-child {
-  border-bottom: none;
-}
-
-/* Add this to the bottom of src/App.css */
-
-.tracker-container {
+.main-content {
+  flex-grow: 1;
   padding: 20px;
-  border-radius: 8px;
-  background-color: #fdfdfd;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e9ecef;
+  background-color: var(--background-color);
+}
+
+.app-container.authenticated .main-content {
+  padding-top: 80px; /* 60px for nav + 20px initial padding */
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5em;
+}
+
+@media (max-width: 768px) {
+  .app-container.authenticated {
+    padding-bottom: 60px; /* Space for bottom nav */
+  }
+
+  .app-container.authenticated .main-content {
+    padding-top: 20px; /* Reset padding-top since nav is at the bottom */
+  }
 }

@@ -2,47 +2,36 @@ import React from "react";
 import type { Transaction } from "../types";
 import { formatTransactionDate } from "../utils/dateUtils";
 import Button from "./Button";
+import Card from "./Card";
 import "../features/transactions/Transaction.css";
 
 interface TransactionListProps {
   transactions: Transaction[];
   onDelete: (id: string) => void;
   title: string;
-  color: string;
+  type: 'income' | 'expense';
 }
 
 const TransactionList: React.FC<TransactionListProps> = ({
   transactions,
   onDelete,
   title,
-  color,
+  type,
 }) => {
+  const amountClass = type === 'income' ? 'income' : 'expense';
+
   return (
-    <div>
-      <h3>{title}</h3>
+    <Card title={title}>
       {transactions.length === 0 ? (
-        <p
-          style={{
-            color: "#666",
-            fontStyle: "italic",
-            textAlign: "center",
-            padding: "20px",
-          }}
-        >
+        <p style={{ textAlign: "center", color: "var(--neutral-gray-dark)" }}>
           No transactions recorded.
         </p>
       ) : (
         <ul className="transaction-list">
           {transactions
             .sort((a, b) => {
-              const dateA =
-                a.createdAt instanceof Date
-                  ? a.createdAt
-                  : a.createdAt.toDate();
-              const dateB =
-                b.createdAt instanceof Date
-                  ? b.createdAt
-                  : b.createdAt.toDate();
+              const dateA = a.createdAt instanceof Date ? a.createdAt : a.createdAt.toDate();
+              const dateB = b.createdAt instanceof Date ? b.createdAt : b.createdAt.toDate();
               return dateB.getTime() - dateA.getTime();
             })
             .map((transaction) => (
@@ -54,13 +43,13 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   </div>
                 </div>
                 <div className="details">
-                  <span className="amount" style={{ color }}>
+                  <span className={`amount ${amountClass}`}>
                     ${transaction.amount.toFixed(2)}
                   </span>
                   <Button
                     onClick={() => onDelete(transaction.id)}
                     style={{
-                      backgroundColor: "#dc3545",
+                      backgroundColor: "var(--primary-red)",
                       fontSize: "0.8em",
                       padding: "6px 12px",
                     }}
@@ -72,7 +61,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
             ))}
         </ul>
       )}
-    </div>
+    </Card>
   );
 };
 

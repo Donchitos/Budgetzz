@@ -1,32 +1,33 @@
 .transaction-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .transaction-item {
-  margin-bottom: 10px;
-  padding: 12px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  border: 1px solid #e9ecef;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
 }
 
 .transaction-item .description {
-  flex: 1;
+  flex-grow: 1;
 }
 
 .transaction-item .description .main {
-  font-weight: bold;
-  font-size: 1.1em;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .transaction-item .description .date {
-  font-size: 0.85em;
-  color: #666;
-  margin-top: 4px;
+  font-size: 0.9em;
+  color: var(--neutral-gray-dark);
 }
 
 .transaction-item .details {
@@ -35,9 +36,17 @@
   gap: 15px;
 }
 
-.transaction-item .details .amount {
+.transaction-item .amount {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em;
+}
+
+.transaction-item .amount.income {
+  color: var(--primary-green);
+}
+
+.transaction-item .amount.expense {
+  color: var(--primary-red);
 }
 
 .transaction-form {
@@ -49,4 +58,30 @@
 .transaction-form input,
 .transaction-form select {
   flex: 1;
+}
+.tracker-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tracker-summary h2 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.tracker-summary h2.income {
+  color: var(--primary-green);
+}
+
+.tracker-summary h2.expense {
+  color: var(--primary-red);
+}
+
+.tracker-summary .count {
+  font-size: 0.9em;
+  color: var(--neutral-gray-dark);
 }

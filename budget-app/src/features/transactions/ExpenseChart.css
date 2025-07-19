@@ -1,0 +1,62 @@
+.expense-chart-container {
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.chart-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.chart-wrapper {
+  height: 300px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.total-summary {
+  text-align: center;
+  padding: 15px;
+  background-color: var(--background-color);
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.total-summary .label {
+  font-size: 1.1em;
+  color: var(--neutral-gray-dark);
+  margin-bottom: 5px;
+}
+
+.total-summary .amount {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--primary-red);
+}
+
+.total-summary .count {
+  font-size: 0.9em;
+  color: var(--neutral-gray-medium);
+  margin-top: 5px;
+}
+
+.no-data-placeholder {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--neutral-gray-dark);
+}
+
+.no-data-placeholder .icon {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.no-data-placeholder .title {
+  font-size: 1.1em;
+  margin-bottom: 5px;
+}
+
+.no-data-placeholder .subtitle {
+  font-size: 0.9em;
+}

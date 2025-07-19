@@ -1,0 +1,48 @@
+.financial-insights {
+  width: 100%;
+}
+
+.insight-message {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.insight-message.positive {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+
+.insight-message.warning {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.insight-message.negative {
+  background-color: #ffebee;
+  color: #b71c1c;
+}
+
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+}
+
+.insight-item {
+  text-align: center;
+}
+
+.insight-item .label {
+  font-size: 0.9em;
+  color: var(--neutral-gray-dark);
+  margin-bottom: 5px;
+}
+
+.insight-item .value {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--text-color);
+}

@@ -43,18 +43,11 @@ function ExpenseTracker({ expenses }: ExpenseTrackerProps) {
         transactionType="Expense"
       />
       <hr />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h2 style={{ color: "#dc3545" }}>
+      <div className="tracker-summary">
+        <h2 className="expense">
           Total Expenses: ${totalExpenses.toFixed(2)}
         </h2>
-        <div style={{ fontSize: "0.9em", color: "#666" }}>
+        <div className="count">
           {expenses.length} transaction{expenses.length !== 1 ? "s" : ""}
         </div>
       </div>
@@ -62,7 +55,7 @@ function ExpenseTracker({ expenses }: ExpenseTrackerProps) {
         transactions={expenses}
         onDelete={handleDeleteExpense}
         title="Your Expenses"
-        color="#dc3545"
+        type="expense"
       />
     </Card>
   );

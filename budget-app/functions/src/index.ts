@@ -10,6 +10,7 @@ export const helloWorld = functions.https.onRequest((request, response) => {
 });
 
 import { handleNotificationDelivery } from "./delivery";
+import { generateBudgetRecommendations } from "./budgetRecommender";
 
 // Export the alert engine
 export { runAlertEngine } from "./alertEngine";
@@ -18,3 +19,6 @@ export { runAlertEngine } from "./alertEngine";
 export const onNotificationCreated = functions.firestore
   .document("notifications/{notificationId}")
   .onCreate(handleNotificationDelivery);
+
+// Export the budget recommender
+export { generateBudgetRecommendations };

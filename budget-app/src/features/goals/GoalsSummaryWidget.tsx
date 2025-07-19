@@ -1,6 +1,44 @@
 import React from 'react';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import type { FinancialGoal } from '../../types/goals';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
+import Card from '../../components/Card';
+import './GoalsSummaryWidget.css';
+
+ChartJS.register(ArcElement, Tooltip);
+
+const GoalProgressChart = ({ goal }: { goal: FinancialGoal }) => {
+  const percentage = goal.targetAmount > 0 ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
+  const data = {
+    datasets: [
+      {
+        data: [goal.currentAmount, Math.max(0, goal.targetAmount - goal.currentAmount)],
+        backgroundColor: ['var(--primary-green)', 'var(--neutral-gray-light)'],
+        borderWidth: 0,
+        circumference: 360,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '70%',
+    plugins: {
+      tooltip: { enabled: false },
+    },
+  };
+
+  return (
+    <div className="goal-chart-wrapper">
+      <Doughnut data={data} options={options} />
+      <div className="goal-chart-center-text">
+        {Math.round(percentage)}%
+      </div>
+    </div>
+  );
+};
 
 const GoalsSummaryWidget: React.FC = () => {
   const { snapshot, loading, error } = useFirestoreCollection('financial-goals');
@@ -13,42 +51,26 @@ const GoalsSummaryWidget: React.FC = () => {
     ...doc.data(),
   } as FinancialGoal)) : [];
 
-  // A simple progress bar component
-  const ProgressBar = ({ value, max }: { value: number; max: number }) => {
-    const percentage = max > 0 ? (value / max) * 100 : 0;
-    return (
-      <div style={{ width: '100%', backgroundColor: '#e0e0de', borderRadius: '4px' }}>
-        <div
-          style={{
-            width: `${percentage}%`,
-            backgroundColor: '#4caf50',
-            height: '20px',
-            borderRadius: '4px',
-            textAlign: 'center',
-            color: 'white',
-          }}
-        >
-          {Math.round(percentage)}%
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="goals-summary-widget">
-      <h4>Goals Summary</h4>
-      {goals.length === 0 ? (
-        <p>No goals yet. Create one in the Goals tab!</p>
-      ) : (
-        goals.slice(0, 4).map((goal) => (
-          <div key={goal.id} style={{ marginBottom: '1rem' }}>
-            <strong>{goal.title}</strong>
-            <ProgressBar value={goal.currentAmount} max={goal.targetAmount} />
-            <p>${goal.currentAmount.toLocaleString()} / ${goal.targetAmount.toLocaleString()}</p>
-          </div>
-        ))
-      )}
-    </div>
+    <Card title="Goals Summary">
+      <div className="goals-summary-widget">
+        {goals.length === 0 ? (
+          <p className="no-goals-message">No goals yet. Create one in the Goals tab!</p>
+        ) : (
+          goals.slice(0, 3).map((goal) => (
+            <div key={goal.id} className="goal-item">
+              <GoalProgressChart goal={goal} />
+              <div className="goal-details">
+                <div className="goal-title">{goal.title}</div>
+                <div className="goal-progress-text">
+                  ${goal.currentAmount.toLocaleString()} / ${goal.targetAmount.toLocaleString()}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </Card>
   );
 };
 

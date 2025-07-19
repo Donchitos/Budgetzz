@@ -36,18 +36,11 @@ function IncomeTracker({ income }: IncomeTrackerProps) {
     <Card title="Income Tracker">
       <TransactionForm onAddTransaction={handleAddIncome} transactionType="Income" />
       <hr />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h2 style={{ color: "#28a745" }}>
+      <div className="tracker-summary">
+        <h2 className="income">
           Total Income: ${totalIncome.toFixed(2)}
         </h2>
-        <div style={{ fontSize: "0.9em", color: "#666" }}>
+        <div className="count">
           {income.length} source{income.length !== 1 ? "s" : ""}
         </div>
       </div>
@@ -55,7 +48,7 @@ function IncomeTracker({ income }: IncomeTrackerProps) {
         transactions={income}
         onDelete={handleDeleteIncome}
         title="Your Income Sources"
-        color="#28a745"
+        type="income"
       />
     </Card>
   );
