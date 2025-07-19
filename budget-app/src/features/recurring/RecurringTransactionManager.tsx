@@ -50,8 +50,19 @@ function RecurringTransactionManager() {
       return;
     }
 
+    // Validate date format
     const startDateObj = new Date(startDate);
+    if (isNaN(startDateObj.getTime())) {
+      alert("Please enter a valid start date.");
+      return;
+    }
+
     const endDateObj = hasEndDate && endDate ? new Date(endDate) : null;
+    
+    if (endDateObj && isNaN(endDateObj.getTime())) {
+      alert("Please enter a valid end date.");
+      return;
+    }
     
     if (endDateObj && endDateObj <= startDateObj) {
       alert("End date must be after start date.");
@@ -59,20 +70,41 @@ function RecurringTransactionManager() {
     }
 
     try {
-      const recurringData = {
+      // Validate frequency type
+      const validFrequencies = ['weekly', 'bi-weekly', 'monthly', 'yearly'];
+      if (!validFrequencies.includes(frequency)) {
+        throw new Error(`Invalid frequency: ${frequency}`);
+      }
+
+      // Calculate next due date with error handling
+      let nextDueDate;
+      try {
+        nextDueDate = calculateNextDueDate(startDateObj, frequency as any);
+      } catch (err) {
+        console.error("Error calculating next due date:", err);
+        alert("Error calculating next due date. Please check your start date and frequency.");
+        return;
+      }
+
+      const recurringData: any = {
         type,
-        description,
+        description: description.trim(),
         amount: parsedAmount,
-        category: type === 'expense' ? category : undefined,
         frequency,
         startDate: startDateObj,
         endDate: endDateObj,
         isActive: true,
-        nextDueDate: calculateNextDueDate(startDateObj, frequency as any),
+        nextDueDate,
         userId: auth.currentUser.uid,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };
+
+      if (type === 'expense') {
+        recurringData.category = category;
+      }
+
+      console.log("Creating recurring transaction with data:", recurringData);
 
       await addDoc(collection(db, 'recurring-transactions'), recurringData);
       
@@ -85,8 +117,8 @@ function RecurringTransactionManager() {
       
       alert(`Recurring ${type} created successfully!`);
     } catch (err) {
-      console.error("Error creating recurring transaction: ", err);
-      alert("Error creating recurring transaction. Please try again.");
+      console.error("Detailed error creating recurring transaction: ", err);
+      alert(`Error creating recurring transaction: ${(err as Error).message || 'Unknown error'}. Please try again.`);
     }
   };
 
