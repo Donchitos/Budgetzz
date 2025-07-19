@@ -9,17 +9,13 @@ interface TransactionListProps {
   transactions: Transaction[];
   onDelete: (id: string) => void;
   title: string;
-  type: 'income' | 'expense';
 }
 
 const TransactionList: React.FC<TransactionListProps> = ({
   transactions,
   onDelete,
   title,
-  type,
 }) => {
-  const amountClass = type === 'income' ? 'income' : 'expense';
-
   return (
     <Card title={title}>
       {transactions.length === 0 ? (
@@ -29,11 +25,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
       ) : (
         <ul className="transaction-list">
           {transactions
-            .sort((a, b) => {
-              const dateA = a.createdAt instanceof Date ? a.createdAt : a.createdAt.toDate();
-              const dateB = b.createdAt instanceof Date ? b.createdAt : b.createdAt.toDate();
-              return dateB.getTime() - dateA.getTime();
-            })
             .map((transaction) => (
               <li key={transaction.id} className="transaction-item">
                 <div className="description">
@@ -43,8 +34,8 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   </div>
                 </div>
                 <div className="details">
-                  <span className={`amount ${amountClass}`}>
-                    ${transaction.amount.toFixed(2)}
+                  <span className={`amount ${transaction.type === 'income' ? 'income' : 'expense'}`}>
+                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
                   </span>
                   <Button
                     onClick={() => onDelete(transaction.id)}

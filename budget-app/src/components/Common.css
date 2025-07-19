@@ -27,6 +27,16 @@
   background-color: #c0392b; /* Darker red */
 }
 
+.button.button-secondary {
+  background-color: var(--neutral-gray-light);
+  color: var(--neutral-gray-dark);
+  border: 1px solid var(--border-color);
+}
+
+.button.button-secondary:hover {
+  background-color: var(--neutral-gray-medium);
+}
+
 /* --- Forms --- */
 .form-group {
   display: flex;

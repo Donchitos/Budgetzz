@@ -15,6 +15,7 @@ const GoalsManager = lazy(() => import('./features/goals/GoalsManager'));
 const ReportsPage = lazy(() => import('./features/reports/ReportsPage'));
 const TransactionPage = lazy(() => import('./features/transactions/TransactionPage'));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
+const RecurringTransactionManager = lazy(() => import('./features/recurring/RecurringTransactionManager'));
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -38,6 +39,7 @@ function App() {
               <Route path="/goals" element={user ? <GoalsManager /> : <Navigate to="/" />} />
               <Route path="/reports" element={user ? <ReportsPage /> : <Navigate to="/" />} />
               <Route path="/alerts" element={user ? <AlertsPage /> : <Navigate to="/" />} />
+              <Route path="/recurring" element={user ? <RecurringTransactionManager /> : <Navigate to="/" />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
             </Routes>
           </Suspense>

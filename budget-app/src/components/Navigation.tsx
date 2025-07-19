@@ -10,12 +10,12 @@ const Navigation: React.FC = () => {
         <NavLink to="/dashboard">BudgetApp</NavLink>
       </div>
       <div className="nav-links">
-        <NavLink to="/dashboard" end>Dashboard</NavLink>
-        <NavLink to="/transactions">Transactions</NavLink>
-        <NavLink to="/budgets">Budgets</NavLink>
+        <NavLink to="/dashboard" end>Overview</NavLink>
+        <NavLink to="/recurring">Recurring</NavLink>
         <NavLink to="/goals">Goals</NavLink>
+        <NavLink to="/budgets">Budgets</NavLink>
+        <NavLink to="/transactions">Transactions</NavLink>
         <NavLink to="/reports">Reports</NavLink>
-        <NavLink to="/alerts">Alerts</NavLink>
       </div>
       <div className="nav-user">
         <NotificationBell />

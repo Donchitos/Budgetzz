@@ -9,6 +9,7 @@ export interface Transaction {
   createdAt: Timestamp | Date;
   userId: string;
   recurringId?: string; // Link to recurring transaction if auto-generated
+  type: 'income' | 'expense';
 }
 
 export interface Budget {

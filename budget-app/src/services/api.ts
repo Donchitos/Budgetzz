@@ -24,7 +24,8 @@ export const addTransaction = async (
   description: string,
   amount: number,
   category?: string,
-  recurringId?: string
+  recurringId?: string,
+  type?: 'income' | 'expense'
 ) => {
   if (!auth.currentUser) throw new Error("User not authenticated");
   const collectionRef = collection(db, collectionName);
@@ -35,6 +36,7 @@ export const addTransaction = async (
     createdAt: serverTimestamp(),
     userId: auth.currentUser.uid,
     recurringId: recurringId || null,
+    type: type || collectionName.slice(0, -1),
   });
 };
 

@@ -1,6 +1,6 @@
 // src/hooks/useData.ts
 import { useCollection } from "react-firebase-hooks/firestore";
-import { collection, query, where } from "firebase/firestore";
+import { collection, query, where, deleteDoc, doc } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
 import { useMemo } from "react";
 import { isDateInRange, getMonthRange } from "../utils/dateUtils";
@@ -88,6 +88,28 @@ export const useData = (selectedPeriod: Date) => {
     [recurringTransactions]
   );
 
+  const deleteTransaction = async (id: string) => {
+    try {
+      // Check if the transaction exists in income
+      const incomeDoc = (income as Transaction[]).find(t => t.id === id);
+      if (incomeDoc) {
+        await deleteDoc(doc(db, "income", id));
+        return;
+      }
+  
+      // Check if the transaction exists in expenses
+      const expenseDoc = (expenses as Transaction[]).find(t => t.id === id);
+      if (expenseDoc) {
+        await deleteDoc(doc(db, "expenses", id));
+        return;
+      }
+  
+      console.warn(`Transaction with id ${id} not found in income or expenses.`);
+    } catch (error) {
+      console.error("Error deleting transaction: ", error);
+    }
+  };
+
   return {
     income: filteredIncome,
     expenses: filteredExpenses,
@@ -100,5 +122,6 @@ export const useData = (selectedPeriod: Date) => {
     totalRecurringExpenses,
     loading: incomeLoading || expensesLoading || budgetsLoading || recurringLoading,
     error: incomeError || expensesError || budgetsError || recurringError,
+    deleteTransaction,
   };
 };

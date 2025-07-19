@@ -18,7 +18,7 @@ function ExpenseTracker({ expenses }: ExpenseTrackerProps) {
     category?: string
   ) => {
     try {
-      await addTransaction("expenses", description, amount, category);
+      await addTransaction("expenses", description, amount, category, undefined, "expense");
     } catch (err) {
       console.error("Error adding expense: ", err);
       alert("Error adding expense. Please try again.");
@@ -55,7 +55,6 @@ function ExpenseTracker({ expenses }: ExpenseTrackerProps) {
         transactions={expenses}
         onDelete={handleDeleteExpense}
         title="Your Expenses"
-        type="expense"
       />
     </Card>
   );

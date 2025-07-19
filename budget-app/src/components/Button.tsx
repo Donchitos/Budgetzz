@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: 'destructive';
+  variant?: 'destructive' | 'secondary';
 }
 
 const Button: React.FC<ButtonProps> = ({ children, className, variant, ...props }) => {

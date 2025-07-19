@@ -21,21 +21,27 @@
 .nav-links {
   display: flex;
   gap: 20px;
+  height: 100%;
 }
 
 .nav-links a {
   text-decoration: none;
   color: var(--neutral-gray-dark);
   font-weight: 500;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  border-bottom: 3px solid transparent;
   transition: all 0.2s;
 }
 
 .nav-links a.active,
 .nav-links a:hover {
-  background-color: var(--neutral-gray-light);
   color: var(--primary-green);
+}
+
+.nav-links a.active {
+    border-bottom-color: var(--primary-green);
 }
 
 .nav-user {

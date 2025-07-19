@@ -14,7 +14,7 @@ function IncomeTracker({ income }: IncomeTrackerProps) {
 
   const handleAddIncome = async (description: string, amount: number) => {
     try {
-      await addTransaction("income", description, amount);
+      await addTransaction("income", description, amount, undefined, undefined, "income");
     } catch (err) {
       console.error("Error adding income: ", err);
       alert("Error adding income. Please try again.");
@@ -48,7 +48,6 @@ function IncomeTracker({ income }: IncomeTrackerProps) {
         transactions={income}
         onDelete={handleDeleteIncome}
         title="Your Income Sources"
-        type="income"
       />
     </Card>
   );
