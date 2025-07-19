@@ -1,0 +1,52 @@
+.transaction-list {
+  list-style: none;
+  padding: 0;
+}
+
+.transaction-item {
+  margin-bottom: 10px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-item .description {
+  flex: 1;
+}
+
+.transaction-item .description .main {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.transaction-item .description .date {
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 4px;
+}
+
+.transaction-item .details {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.transaction-item .details .amount {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.transaction-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.transaction-form input,
+.transaction-form select {
+  flex: 1;
+}

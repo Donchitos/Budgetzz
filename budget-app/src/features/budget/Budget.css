@@ -1,0 +1,128 @@
+.budget-manager-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.budget-manager-form input,
+.budget-manager-form select {
+  flex: 1;
+}
+
+.budget-list {
+  list-style: none;
+  padding: 0;
+}
+
+.budget-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.budget-item .category {
+  font-weight: bold;
+}
+
+.budget-item .amount {
+  margin-left: 10px;
+}
+
+.budget-comparison .summary {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  text-align: center;
+}
+
+.budget-comparison .summary .label {
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-bottom: 5px;
+}
+
+.budget-comparison .summary .value {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.budget-comparison .summary .total-budget .value {
+  color: #495057;
+}
+
+.budget-comparison .summary .total-spent .value {
+  color: #dc3545;
+}
+
+.budget-comparison .summary .remaining .value.positive {
+  color: #28a745;
+}
+
+.budget-comparison .summary .remaining .value.negative {
+  color: #dc3545;
+}
+
+.category-breakdown {
+  list-style: none;
+  padding: 0;
+}
+
+.category-item {
+  margin-bottom: 15px;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+}
+
+.category-item .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.category-item .header .name {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.category-item .header .details {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 2px;
+}
+
+.category-item .header .status {
+  text-align: right;
+}
+
+.category-item .header .status .amount {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.category-item .header .status .no-budget {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar .progress {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}

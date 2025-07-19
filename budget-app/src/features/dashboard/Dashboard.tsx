@@ -1,51 +1,93 @@
-import { signOut } from 'firebase/auth';
-import { auth } from '../../services/firebase';
-import useFirestoreCollection from '../../hooks/useFirestoreCollection';
-import ExpenseTracker from '../../features/transactions/ExpenseTracker';
-import IncomeTracker from '../../features/transactions/IncomeTracker';
-import ExpenseChart from '../../features/transactions/ExpenseChart';
-import BudgetManager from '../../features/budget/BudgetManager';
-import BudgetComparison from '../../features/budget/BudgetComparison';
-import Button from '../../components/Button';
+// src/features/dashboard/Dashboard.tsx
+import React, { useState } from 'react';
+import { signOut } from "firebase/auth";
+import { auth } from "../../services/firebase";
+import ExpenseTracker from "../../features/transactions/ExpenseTracker";
+import IncomeTracker from "../../features/transactions/IncomeTracker";
+import ExpenseChart from "../../features/transactions/ExpenseChart";
+import BudgetManager from "../../features/budget/BudgetManager";
+import BudgetComparison from "../../features/budget/BudgetComparison";
+import PeriodSelector from "../../components/PeriodSelector";
+import Button from "../../components/Button";
+import { getCurrentMonth } from "../../utils/dateUtils";
+import { useData } from "../../hooks/useData";
+import "./Dashboard.css";
 
 function Dashboard() {
-  const { snapshot: incomeSnapshot } = useFirestoreCollection('income');
-  const { snapshot: expensesSnapshot } = useFirestoreCollection('expenses');
-  const { snapshot: budgetsSnapshot } = useFirestoreCollection('budgets');
+  const [selectedPeriod, setSelectedPeriod] = useState<Date>(getCurrentMonth());
+  const {
+    income,
+    expenses,
+    budgets,
+    totalIncome,
+    totalExpenses,
+    loading,
+    error,
+  } = useData(selectedPeriod);
 
-  const totalIncome = incomeSnapshot?.docs.reduce((total, doc) => total + doc.data().amount, 0) || 0;
-  const totalExpenses = expensesSnapshot?.docs.reduce((total, doc) => total + doc.data().amount, 0) || 0;
   const balance = totalIncome - totalExpenses;
 
   const handleLogout = () => {
     signOut(auth);
   };
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading data.</p>;
+
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="dashboard-header">
         <h1>Welcome, {auth.currentUser?.email}</h1>
-        <div>
-          <h2>Balance: ${balance.toFixed(2)}</h2>
+        <div className="balance">
+          <h2 className={balance >= 0 ? "positive" : "negative"}>
+            Balance: ${balance.toFixed(2)}
+          </h2>
           <Button onClick={handleLogout}>Logout</Button>
         </div>
       </div>
-      <hr />
-      
-      <ExpenseChart expensesSnapshot={expensesSnapshot} />
-      
-      <hr />
-      
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
-        <BudgetManager />
-        <BudgetComparison budgetsSnapshot={budgetsSnapshot} expensesSnapshot={expensesSnapshot} />
+
+      <PeriodSelector
+        selectedDate={selectedPeriod}
+        onDateChange={setSelectedPeriod}
+      />
+
+      <div className="monthly-summary">
+        <div className="income">
+          <h3>Income</h3>
+          <p>${totalIncome.toFixed(2)}</p>
+        </div>
+        <div className="expenses">
+          <h3>Expenses</h3>
+          <p>${totalExpenses.toFixed(2)}</p>
+        </div>
+        <div className="net">
+          <h3 className={balance >= 0 ? "positive" : "negative"}>Net</h3>
+          <p>${balance.toFixed(2)}</p>
+        </div>
       </div>
 
       <hr />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
-        <IncomeTracker />
-        <ExpenseTracker />
+      <ExpenseChart expenses={expenses} />
+
+      <hr />
+
+      <div className="dashboard-grid">
+        <BudgetManager
+          budgets={budgets}
+          selectedPeriod={selectedPeriod}
+        />
+        <BudgetComparison
+          budgets={budgets}
+          expenses={expenses}
+        />
+      </div>
+
+      <hr />
+
+      <div className="dashboard-grid">
+        <IncomeTracker income={income} />
+        <ExpenseTracker expenses={expenses} />
       </div>
     </div>
   );

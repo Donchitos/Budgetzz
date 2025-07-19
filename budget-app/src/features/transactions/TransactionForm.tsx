@@ -1,31 +1,43 @@
-import React, { useState } from 'react';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import React, { useState } from "react";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
+import "./Transaction.css";
 
 interface TransactionFormProps {
-  onAddTransaction: (description: string, amount: number, category?: string) => void;
-  transactionType: 'Income' | 'Expense';
+  onAddTransaction: (
+    description: string,
+    amount: number,
+    category?: string
+  ) => void;
+  transactionType: "Income" | "Expense";
 }
 
-const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, transactionType }) => {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('Food');
+const TransactionForm: React.FC<TransactionFormProps> = ({
+  onAddTransaction,
+  transactionType,
+}) => {
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("Food");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      alert('Please enter a valid amount greater than 0.');
+      alert("Please enter a valid amount greater than 0.");
       return;
     }
-    onAddTransaction(description, parsedAmount, transactionType === 'Expense' ? category : undefined);
-    setDescription('');
-    setAmount('');
+    onAddTransaction(
+      description,
+      parsedAmount,
+      transactionType === "Expense" ? category : undefined
+    );
+    setDescription("");
+    setAmount("");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="transaction-form">
       <Input
         type="text"
         value={description}
@@ -40,7 +52,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, tra
         placeholder="Amount"
         required
       />
-      {transactionType === 'Expense' && (
+      {transactionType === "Expense" && (
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="Food">Food</option>
           <option value="Transport">Transport</option>
