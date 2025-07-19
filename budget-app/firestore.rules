@@ -3,6 +3,29 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Rules for collections under a user's document
+    match /users/{userId} {
+      // `notifications` Collection (`/users/{userId}/notifications/{notificationId}`):
+      // Allow `read` and `update` only if the requesting user's `uid` matches the `userId`.
+      // Do not allow `create` or `delete` from the client, as this is handled by the backend functions.
+      match /notifications/{notificationId} {
+        allow read, update: if request.auth.uid == userId;
+        allow create, delete: if false;
+      }
+
+    }
+
+    // Rule for the 'userNotificationPreferences' collection
+    match /userNotificationPreferences/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    // Rule for the 'alertRules' collection
+    match /alertRules/{ruleId} {
+      allow read, update, delete: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+
     // Rule for the 'expenses' collection
     match /expenses/{expenseId} {
       allow read, update, delete: if request.auth.uid == resource.data.userId;
