@@ -116,6 +116,7 @@ function BudgetManager({ budgets, selectedPeriod }: BudgetManagerProps) {
                   </div>
                   <Button
                     onClick={() => handleDeleteBudget(budget.id, budget.category)}
+                    variant="destructive"
                     className="delete-button"
                   >
                     Delete

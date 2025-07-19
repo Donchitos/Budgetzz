@@ -48,11 +48,8 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   </span>
                   <Button
                     onClick={() => onDelete(transaction.id)}
-                    style={{
-                      backgroundColor: "var(--primary-red)",
-                      fontSize: "0.8em",
-                      padding: "6px 12px",
-                    }}
+                    variant="destructive"
+                    style={{ fontSize: "0.8em", padding: "6px 12px" }}
                   >
                     Delete
                   </Button>
