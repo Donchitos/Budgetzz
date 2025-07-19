@@ -15,7 +15,7 @@ service cloud.firestore {
       allow create: if request.auth.uid == request.resource.data.userId;
     }
     
-    // CORRECTED Rule for the 'budgets' collection
+    // Rule for the 'budgets' collection
     match /budgets/{budgetId} {
        allow read, update, delete: if request.auth.uid == resource.data.userId;
        allow create: if request.auth.uid == request.resource.data.userId;
@@ -26,15 +26,34 @@ service cloud.firestore {
       allow read, update, delete: if request.auth.uid == resource.data.userId;
       allow create: if request.auth.uid == request.resource.data.userId;
     }
-    // financial-goals collection
+
+    // Rule for the 'financial-goals' collection
     match /financial-goals/{goalId} {
       allow read, write: if request.auth.uid == resource.data.userId;
       allow create: if request.auth.uid == request.resource.data.userId;
     }
 
-    // goal-contributions collection
+    // Rule for the 'goal-contributions' collection
     match /goal-contributions/{contributionId} {
       allow read, write: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+
+    // NEW: Rule for the 'monthlySummaries' collection (for pre-aggregated analytics data)
+    match /monthlySummaries/{summaryId} {
+      allow read, write: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+
+    // NEW: Rule for saved reports or report configurations
+    match /savedReports/{reportId} {
+      allow read, update, delete: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+
+    // NEW: Rule for report templates or shared report configurations
+    match /reportTemplates/{templateId} {
+      allow read, update, delete: if request.auth.uid == resource.data.userId;
       allow create: if request.auth.uid == request.resource.data.userId;
     }
   }
