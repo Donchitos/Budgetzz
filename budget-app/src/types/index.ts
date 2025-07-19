@@ -25,6 +25,7 @@ export interface DateRange {
   end: Date;
 }
 
+export type ComparisonMode = 'none' | 'mom' | 'yoy';
 export type FrequencyType = 'weekly' | 'bi-weekly' | 'monthly' | 'yearly';
 
 export interface RecurringTransaction {

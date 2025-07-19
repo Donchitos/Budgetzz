@@ -13,13 +13,14 @@ import UpcomingTransactions from "../../features/recurring/UpcomingTransactions"
 import GoalsManager from '../goals/GoalsManager';
 import GoalsSummaryWidget from '../goals/GoalsSummaryWidget';
 import SmartGoalSuggestions from '../goals/SmartGoalSuggestions';
+import ReportsPage from '../reports/ReportsPage'; // Import the new ReportsPage
 import PeriodSelector from "../../components/PeriodSelector";
 import Button from "../../components/Button";
 import { getCurrentMonth } from "../../utils/dateUtils";
 import { useData } from "../../hooks/useData";
 import "./Dashboard.css";
 
-type TabType = 'overview' | 'recurring' | 'budgets' | 'transactions' | 'goals';
+type TabType = 'overview' | 'recurring' | 'budgets' | 'transactions' | 'goals' | 'reports'; // Add 'reports' tab
 
 function Dashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState<Date>(getCurrentMonth());
@@ -119,6 +120,7 @@ function Dashboard() {
         <TabButton tab="goals" label="Goals">🏆</TabButton>
         <TabButton tab="budgets" label="Budgets">🎯</TabButton>
         <TabButton tab="transactions" label="Transactions">💰</TabButton>
+        <TabButton tab="reports" label="Reports">📈</TabButton>
       </div>
 
       {/* Tab Content */}
@@ -216,6 +218,10 @@ function Dashboard() {
             <IncomeTracker income={income} />
             <ExpenseTracker expenses={expenses} />
           </div>
+        )}
+
+        {activeTab === 'reports' && (
+          <ReportsPage />
         )}
       </div>
 
