@@ -40,8 +40,15 @@ service cloud.firestore {
     
     // Rule for the 'budgets' collection
     match /budgets/{budgetId} {
-       allow read, update, delete: if request.auth.uid == resource.data.userId;
-       allow create: if request.auth.uid == request.resource.data.userId;
+      // Allow reading a single document or a list of documents if the user is the owner.
+      // This rule requires client-side queries to include `where("userId", "==", request.auth.uid)`.
+      allow read: if request.auth.uid == resource.data.userId;
+    
+      // Allow creating a document if the user is the owner.
+      allow create: if request.auth.uid == request.resource.data.userId;
+    
+      // Allow updating or deleting a document if the user is the owner.
+      allow update, delete: if request.auth.uid == resource.data.userId;
     }
 
     // Rule for the 'recurring-transactions' collection
