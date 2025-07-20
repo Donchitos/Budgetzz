@@ -1,3 +1,4 @@
+// Fixed useBudget.ts - corrected month filtering logic
 import { useState, useMemo } from 'react';
 import { setBudget, deleteBudget } from '../../services/api';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
@@ -12,8 +13,11 @@ export const useBudget = (selectedPeriod: Date) => {
 
   const budgets = useMemo(() => {
     if (!snapshot) return [];
-    const month = selectedPeriod.getMonth() + 1;
+    
+    // FIX: Use 0-based months to match how they're stored in the database
+    const month = selectedPeriod.getMonth(); // 0-based (August = 7)
     const year = selectedPeriod.getFullYear();
+    
     return snapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() } as Budget))
       .filter(budget => budget.month === month && budget.year === year);
