@@ -32,16 +32,10 @@ function BudgetComparison({
   if (allCategories.size === 0) {
     return (
       <Card title={`Budget Overview${periodLabel ? ` - ${periodLabel}` : ""}`}>
-        <div
-          style={{
-            textAlign: "center",
-            padding: "40px 20px",
-            color: "#6c757d",
-          }}
-        >
-          <div style={{ fontSize: "3em", marginBottom: "15px" }}>🎯</div>
-          <h4 style={{ marginBottom: "10px" }}>No budgets or expenses yet</h4>
-          <p style={{ margin: 0, fontSize: "0.9em" }}>
+        <div className="text-center p-10 text-gray-500">
+          <div className="text-5xl mb-4">🎯</div>
+          <h4 className="mb-2">No budgets or expenses yet</h4>
+          <p className="m-0 text-sm">
             Set some budgets and add expenses to see your progress
           </p>
         </div>
@@ -83,7 +77,7 @@ function BudgetComparison({
           </div>
         </div>
 
-        <h4 style={{ marginBottom: "15px" }}>Category Breakdown</h4>
+        <h4 className="mb-4">Category Breakdown</h4>
         <ul className="category-breakdown">
           {Array.from(allCategories)
             .sort()
@@ -106,7 +100,7 @@ function BudgetComparison({
                       <div className="details">
                         ${spentAmount.toFixed(2)} of ${budgetAmount.toFixed(2)}
                         {budgetAmount > 0 && (
-                          <span style={{ marginLeft: "10px" }}>
+                          <span className="ml-2">
                             ({percentage.toFixed(1)}%)
                           </span>
                         )}

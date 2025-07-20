@@ -9,6 +9,7 @@ import CategoryBreakdown from './CategoryBreakdown';
 import AdvancedFilterControls from './AdvancedFilterControls';
 import type { ReportFilters } from './AdvancedFilterControls';
 import ReportExporter from './ReportExporter';
+import Skeleton from '../../components/Skeleton';
 
 const ReportsPage: React.FC = () => {
   const [dateRange, setDateRange] = useState<DateRange>({
@@ -59,7 +60,19 @@ const ReportsPage: React.FC = () => {
     return Array.from(allCategories).sort();
   }, [current.expenses, previous.expenses]);
 
-  if (loading) return <p>Loading reports...</p>;
+  if (loading) {
+    return (
+      <div>
+        <h2>Advanced Reports</h2>
+        <Skeleton className="h-12 w-full mb-4" />
+        <Skeleton className="h-12 w-full mb-4" />
+        <div className="grid grid-cols-[2fr_1fr] gap-8 mt-8">
+          <Skeleton className="h-96" />
+          <Skeleton className="h-96" />
+        </div>
+      </div>
+    );
+  }
   if (error) return <p>Error loading reports: {error.message}</p>;
 
   return (
@@ -82,7 +95,7 @@ const ReportsPage: React.FC = () => {
       <p><b>Current Range:</b> {dateRange.start.toLocaleDateString()} - {dateRange.end.toLocaleDateString()}</p>
       <p><b>Comparison Mode:</b> {comparison}</p>
       
-      <div style={{ marginTop: '20px' }}>
+      <div className="mt-5">
         <h3>Data Overview</h3>
         <p>Total Income Records: {filteredData.current.income.length} (of {current.income.length})</p>
         <p>Total Expense Records: {filteredData.current.expenses.length} (of {current.expenses.length})</p>
@@ -94,8 +107,8 @@ const ReportsPage: React.FC = () => {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '30px', marginTop: '30px' }}>
-        <div style={{ maxWidth: '800px' }}>
+      <div className="grid grid-cols-[2fr_1fr] gap-8 mt-8">
+        <div className="max-w-3xl">
           <TrendChart
             currentData={filteredData.current}
             previousData={filteredData.previous}
@@ -103,7 +116,7 @@ const ReportsPage: React.FC = () => {
             comparison={comparison}
           />
         </div>
-        <div style={{ maxWidth: '400px' }}>
+        <div className="max-w-md">
           <CategoryBreakdown
             currentExpenses={filteredData.current.expenses}
             previousExpenses={filteredData.previous.expenses}

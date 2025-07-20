@@ -4,6 +4,7 @@ import type { AlertRule } from '../../types/alerts';
 import { deleteAlertRule } from '../../services/api';
 import AlertRuleForm from './AlertRuleForm';
 import NotificationPreferences from './NotificationPreferences';
+import Skeleton from '../../components/Skeleton';
 
 const AlertsPage: React.FC = () => {
   const { snapshot: rulesSnapshot, loading } = useFirestoreCollection('alertRules');
@@ -42,16 +43,23 @@ const AlertsPage: React.FC = () => {
       <div className="card">
         <h2>Alert Rules</h2>
         <button onClick={handleAddNew}>Add New Rule</button>
-        {loading && <p>Loading rules...</p>}
-        <ul>
-          {alertRules.map((rule) => (
-            <li key={rule.id}>
-              <span>{rule.alertType} - {rule.isEnabled ? 'Enabled' : 'Disabled'}</span>
-              <button onClick={() => handleEdit(rule)}>Edit</button>
-              <button onClick={() => handleDelete(rule.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <ul className="mt-4">
+            <li className="mb-2"><Skeleton className="h-8 w-full" /></li>
+            <li className="mb-2"><Skeleton className="h-8 w-full" /></li>
+            <li><Skeleton className="h-8 w-full" /></li>
+          </ul>
+        ) : (
+          <ul>
+            {alertRules.map((rule) => (
+              <li key={rule.id}>
+                <span>{rule.alertType} - {rule.isEnabled ? 'Enabled' : 'Disabled'}</span>
+                <button onClick={() => handleEdit(rule)}>Edit</button>
+                <button onClick={() => handleDelete(rule.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {isFormOpen && (

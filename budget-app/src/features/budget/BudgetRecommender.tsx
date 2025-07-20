@@ -67,7 +67,7 @@ const BudgetRecommender: React.FC<BudgetRecommenderProps> = ({ onBudgetsApplied 
   }
 
   if (error) {
-    return <p style={{ color: 'var(--primary-red)' }}>{error}</p>;
+    return <p className="text-red-500">{error}</p>;
   }
 
   if (recommendations.length === 0) {
@@ -83,7 +83,7 @@ const BudgetRecommender: React.FC<BudgetRecommenderProps> = ({ onBudgetsApplied 
       <p>Based on your spending over the last 3 months, we suggest the following monthly budgets:</p>
       <ul>
         {recommendations.map(rec => (
-          <li key={rec.category} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <li key={rec.category} className="flex justify-between items-center mb-2">
             <span><strong>{rec.category}:</strong> ${rec.recommendedAmount}</span>
             <Button onClick={() => handleApplyRecommendation(rec.category, rec.recommendedAmount)}>
               Apply
@@ -92,7 +92,7 @@ const BudgetRecommender: React.FC<BudgetRecommenderProps> = ({ onBudgetsApplied 
         ))}
       </ul>
       {recommendations.length > 1 && (
-        <Button onClick={handleApplyAll} style={{ marginTop: '20px', backgroundColor: 'var(--primary-green)' }}>
+        <Button onClick={handleApplyAll} className="mt-5 bg-green-500 hover:bg-green-600 text-white">
           Apply All Suggestions
         </Button>
       )}

@@ -9,6 +9,7 @@ import Card from '../../components/Card';
 import { getCurrentMonth } from "../../utils/dateUtils";
 import { useData } from "../../hooks/useData";
 import type { Transaction } from '../../types';
+import Skeleton from '../../components/Skeleton';
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -31,7 +32,29 @@ function Dashboard() {
     signOut(auth);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="dashboard">
+        <header className="dashboard-header">
+          <div>
+            <Skeleton className="h-8 w-48 mb-2" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+          <Skeleton className="h-10 w-24" />
+        </header>
+        <Skeleton className="h-32 w-full mb-8" />
+        <div className="dashboard-main-content">
+          <div className="dashboard-left-column">
+            <Skeleton className="h-96 w-full" />
+          </div>
+          <div className="dashboard-right-column">
+            <Skeleton className="h-48 w-full mb-8" />
+            <Skeleton className="h-64 w-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (error) {
     console.error("Error loading data:", error);
     return <p>Error loading data: {error.message}. Check the console for more details.</p>;
@@ -80,7 +103,6 @@ function Dashboard() {
             title="Recent Transactions"
             transactions={recentTransactions}
             onDelete={(id: string) => deleteTransaction(id)}
-            type="expense"
           />
         </div>
         <div className="dashboard-right-column">

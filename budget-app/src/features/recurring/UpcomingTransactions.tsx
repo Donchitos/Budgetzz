@@ -25,13 +25,9 @@ function UpcomingTransactions({ daysAhead = 14 }: UpcomingTransactionsProps) {
   if (upcomingTransactions.length === 0) {
     return (
       <Card title={`Next ${daysAhead} Days Preview`}>
-        <div style={{ 
-          textAlign: 'center',
-          padding: '20px',
-          color: '#666'
-        }}>
-          <div style={{ fontSize: '2em', marginBottom: '8px' }}>📅</div>
-          <p style={{ margin: 0, fontSize: '0.9em' }}>
+        <div className="text-center p-5 text-gray-600">
+          <div className="text-3xl mb-2">📅</div>
+          <p className="m-0 text-sm">
             No recurring transactions scheduled for the next {daysAhead} days.
           </p>
         </div>
@@ -89,36 +85,22 @@ function UpcomingTransactions({ daysAhead = 14 }: UpcomingTransactionsProps) {
   return (
     <Card title={`Upcoming Transactions (Next ${daysAhead} Days)`}>
       {/* Summary */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: '1fr 1fr 1fr', 
-        gap: '15px',
-        marginBottom: '20px',
-        padding: '15px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        border: '1px solid #e9ecef',
-        textAlign: 'center'
-      }}>
+      <div className="grid grid-cols-3 gap-4 mb-5 p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
         <div>
-          <div style={{ fontSize: '0.9em', color: '#666', marginBottom: '5px' }}>Expected Income</div>
-          <div style={{ fontSize: '1.2em', fontWeight: 'bold', color: '#28a745' }}>
+          <div className="text-sm text-gray-600 mb-1">Expected Income</div>
+          <div className="text-lg font-bold text-green-600">
             ${totalUpcomingIncome.toFixed(2)}
           </div>
         </div>
         <div>
-          <div style={{ fontSize: '0.9em', color: '#666', marginBottom: '5px' }}>Expected Expenses</div>
-          <div style={{ fontSize: '1.2em', fontWeight: 'bold', color: '#dc3545' }}>
+          <div className="text-sm text-gray-600 mb-1">Expected Expenses</div>
+          <div className="text-lg font-bold text-red-600">
             ${totalUpcomingExpenses.toFixed(2)}
           </div>
         </div>
         <div>
-          <div style={{ fontSize: '0.9em', color: '#666', marginBottom: '5px' }}>Net Impact</div>
-          <div style={{ 
-            fontSize: '1.2em', 
-            fontWeight: 'bold', 
-            color: (totalUpcomingIncome - totalUpcomingExpenses) >= 0 ? '#28a745' : '#dc3545'
-          }}>
+          <div className="text-sm text-gray-600 mb-1">Net Impact</div>
+          <div className={`text-lg font-bold ${(totalUpcomingIncome - totalUpcomingExpenses) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             ${(totalUpcomingIncome - totalUpcomingExpenses).toFixed(2)}
           </div>
         </div>
@@ -127,46 +109,32 @@ function UpcomingTransactions({ daysAhead = 14 }: UpcomingTransactionsProps) {
       {/* Timeline */}
       <div>
         {groupedTransactions.map(({ date, transactions }) => (
-          <div key={date.toDateString()} style={{ marginBottom: '20px' }}>
-            <h5 style={{ 
-              margin: '0 0 10px 0',
-              padding: '8px 12px',
-              backgroundColor: '#e9ecef',
-              borderRadius: '4px',
-              color: '#495057'
-            }}>
+          <div key={date.toDateString()} className="mb-5">
+            <h5 className="m-0 mb-2 p-2 bg-gray-200 rounded text-gray-700">
               {formatDate(date)} ({date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})
             </h5>
             
-            <div style={{ marginLeft: '15px' }}>
+            <div className="ml-4">
               {transactions.map(transaction => (
-                <div 
+                <div
                   key={`${transaction.id}-${date.getTime()}`}
-                  style={{ 
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '8px 12px',
-                    marginBottom: '8px',
-                    backgroundColor: transaction.type === 'income' ? '#d4edda' : '#f8d7da',
-                    borderRadius: '4px',
-                    borderLeft: `3px solid ${transaction.type === 'income' ? '#28a745' : '#dc3545'}`
-                  }}
+                  className={`flex justify-between items-center p-2 mb-2 rounded ${
+                    transaction.type === 'income' ? 'bg-green-100 border-l-4 border-green-500' : 'bg-red-100 border-l-4 border-red-500'
+                  }`}
                 >
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 'bold', fontSize: '0.9em' }}>
+                  <div className="flex-1">
+                    <div className="font-bold text-sm">
                       {transaction.description}
                     </div>
-                    <div style={{ fontSize: '0.8em', color: '#666' }}>
+                    <div className="text-xs text-gray-600">
                       {formatFrequency(transaction.frequency)}
                       {transaction.category && ` • ${transaction.category}`}
                     </div>
                   </div>
                   
-                  <div style={{ 
-                    fontWeight: 'bold',
-                    color: transaction.type === 'income' ? '#155724' : '#721c24'
-                  }}>
+                  <div className={`font-bold ${
+                    transaction.type === 'income' ? 'text-green-800' : 'text-red-800'
+                  }`}>
                     {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
                   </div>
                 </div>
@@ -176,15 +144,8 @@ function UpcomingTransactions({ daysAhead = 14 }: UpcomingTransactionsProps) {
         ))}
       </div>
 
-      <div style={{ 
-        marginTop: '15px',
-        padding: '12px',
-        backgroundColor: '#d1ecf1',
-        borderRadius: '4px',
-        fontSize: '0.9em',
-        color: '#0c5460'
-      }}>
-        <strong>💡 Forecast:</strong> This preview shows your scheduled recurring transactions. 
+      <div className="mt-4 p-3 bg-blue-100 rounded text-sm text-blue-800">
+        <strong>💡 Forecast:</strong> This preview shows your scheduled recurring transactions.
         Actual amounts may vary based on when transactions are generated.
       </div>
     </Card>

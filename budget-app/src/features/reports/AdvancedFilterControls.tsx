@@ -27,9 +27,9 @@ const AdvancedFilterControls: React.FC<AdvancedFilterControlsProps> = ({
   };
 
   return (
-    <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '20px' }}>
+    <div className="flex items-center gap-5 mb-5">
       <div>
-        <label htmlFor="search-input" style={{ marginRight: '10px' }}>Search Description:</label>
+        <label htmlFor="search-input" className="mr-2">Search Description:</label>
         <Input
           id="search-input"
           type="text"
@@ -39,13 +39,13 @@ const AdvancedFilterControls: React.FC<AdvancedFilterControlsProps> = ({
         />
       </div>
       <div>
-        <label htmlFor="category-select" style={{ marginRight: '10px' }}>Filter by Category:</label>
+        <label htmlFor="category-select" className="mr-2">Filter by Category:</label>
         <select
           id="category-select"
           multiple
           value={filters.categories}
           onChange={handleCategoryChange}
-          style={{ minWidth: '200px', minHeight: '80px' }}
+          className="min-w-[200px] min-h-[80px]"
         >
           {availableCategories.map((category) => (
             <option key={category} value={category}>

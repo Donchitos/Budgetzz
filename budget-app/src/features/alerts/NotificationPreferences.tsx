@@ -3,6 +3,7 @@ import { getUserNotificationPreferences, setUserNotificationPreferences } from '
 import type { UserNotificationPreference } from '../../types/alerts';
 import { auth } from '../../services/firebase';
 import { Timestamp } from 'firebase/firestore';
+import Skeleton from '../../components/Skeleton';
 
 const NotificationPreferences: React.FC = () => {
   const [preferences, setPreferences] = useState<UserNotificationPreference | null>(null);
@@ -65,7 +66,25 @@ const NotificationPreferences: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading preferences...</div>;
+    return (
+      <div className="card">
+        <h2>Notification Preferences</h2>
+        <div className="form-group">
+          <Skeleton className="h-5 w-48" />
+        </div>
+        <div className="form-group">
+          <Skeleton className="h-5 w-48" />
+        </div>
+        <div className="form-group">
+          <Skeleton className="h-5 w-48" />
+        </div>
+        <h3>Do Not Disturb</h3>
+        <div className="form-group">
+          <Skeleton className="h-5 w-48" />
+        </div>
+        <Skeleton className="h-10 w-32 mt-4" />
+      </div>
+    );
   }
 
   if (!preferences) {

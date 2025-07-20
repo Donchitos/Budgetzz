@@ -3,6 +3,7 @@ import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import type { FinancialGoal } from '../../types/goals';
 import { collection, addDoc } from 'firebase/firestore';
 import { db, auth } from '../../services/firebase';
+import Skeleton from '../../components/Skeleton';
 
 const GoalsManager: React.FC = () => {
   const { snapshot, loading, error } = useFirestoreCollection('financial-goals');
@@ -39,7 +40,23 @@ const GoalsManager: React.FC = () => {
     }
   };
 
-  if (loading) return <p>Loading goals...</p>;
+  if (loading) {
+    return (
+      <div>
+        <h2>Goals Manager</h2>
+        <Skeleton className="h-10 w-full mb-2" />
+        <Skeleton className="h-10 w-full mb-2" />
+        <Skeleton className="h-10 w-full mb-4" />
+        <Skeleton className="h-10 w-24" />
+
+        <div className="mt-8">
+          <h3>Your Goals</h3>
+          <Skeleton className="h-24 w-full mt-4" />
+          <Skeleton className="h-24 w-full mt-4" />
+        </div>
+      </div>
+    );
+  }
   if (error) return <p>Error: {error.message}</p>;
 
   return (

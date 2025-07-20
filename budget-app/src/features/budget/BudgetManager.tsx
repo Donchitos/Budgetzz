@@ -95,7 +95,7 @@ function BudgetManager({ budgets, selectedPeriod }: BudgetManagerProps) {
 
           <div className="budget-list-header">
             <h3>Current Month's Budgets</h3>
-            <Button onClick={() => setShowRecommender(true)} style={{ backgroundColor: 'var(--primary-green)'}}>
+            <Button onClick={() => setShowRecommender(true)} className="bg-green-500 hover:bg-green-600 text-white">
               Get Smart Suggestions
             </Button>
           </div>

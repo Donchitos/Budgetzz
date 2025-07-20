@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './services/firebase';
-
+import Skeleton from './components/Skeleton';
 import Navigation from './components/Navigation';
 import './App.css';
 
@@ -21,7 +21,13 @@ function App() {
   const [user, loading] = useAuthState(auth);
 
   if (loading) {
-    return <div className="loading-container">Loading...</div>;
+    return (
+      <div className="app-container">
+        <div className="main-content p-8">
+          <Skeleton className="h-screen w-full" />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -29,7 +35,7 @@ function App() {
       <div className={`app-container ${user ? 'authenticated' : ''}`}>
         {user && <Navigation />}
         <main className="main-content">
-          <Suspense fallback={<div className="loading-container">Loading Page...</div>}>
+          <Suspense fallback={<div className="p-8"><Skeleton className="h-screen w-full" /></div>}>
             <Routes>
               <Route path="/" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
               <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />

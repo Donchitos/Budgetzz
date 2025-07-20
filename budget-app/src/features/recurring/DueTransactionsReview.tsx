@@ -5,9 +5,10 @@ import { db, auth } from '../../services/firebase';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import Card from '../../components/Card';
 import Button from '../../components/Button';
-import { 
-  getDueRecurringTransactions, 
-  calculateNextDueDate, 
+import Skeleton from '../../components/Skeleton';
+import {
+  getDueRecurringTransactions,
+  calculateNextDueDate,
   generateTransactionFromRecurring,
   formatFrequency,
   calculateMissedOccurrences
@@ -140,48 +141,44 @@ function DueTransactionsReview() {
     });
   };
 
-  if (loading) return <p>Loading due transactions...</p>;
+  if (loading) {
+    return (
+      <Card title="Due Recurring Transactions">
+        <div className="p-4">
+          <Skeleton className="h-16 w-full mb-4" />
+          <Skeleton className="h-16 w-full mb-4" />
+        </div>
+      </Card>
+    );
+  }
   if (error) return <p>Error loading due transactions.</p>;
 
   return (
     <Card title="Due Recurring Transactions">
       {dueTransactions.length === 0 ? (
-        <div style={{ 
-          textAlign: 'center',
-          padding: '30px 20px',
-          color: '#666'
-        }}>
-          <div style={{ fontSize: '2.5em', marginBottom: '10px' }}>✅</div>
-          <h4 style={{ marginBottom: '5px' }}>All caught up!</h4>
-          <p style={{ margin: 0, fontSize: '0.9em' }}>
+        <div className="text-center p-8 text-gray-600">
+          <div className="text-4xl mb-2">✅</div>
+          <h4 className="mb-1">All caught up!</h4>
+          <p className="m-0 text-sm">
             No recurring transactions are due at the moment.
           </p>
         </div>
       ) : (
         <div>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            marginBottom: '20px',
-            padding: '15px',
-            backgroundColor: '#fff3cd',
-            borderRadius: '8px',
-            border: '1px solid #ffeaa7'
-          }}>
+          <div className="flex justify-between items-center mb-5 p-4 bg-yellow-100 rounded-lg border border-yellow-300">
             <div>
-              <strong style={{ color: '#856404' }}>
+              <strong className="text-yellow-800">
                 {dueTransactions.length} transaction{dueTransactions.length !== 1 ? 's' : ''} due
               </strong>
-              <div style={{ fontSize: '0.9em', color: '#856404', marginTop: '2px' }}>
+              <div className="text-sm text-yellow-800 mt-1">
                 Review and add them to your transactions
               </div>
             </div>
             
             {dueTransactions.length > 1 && (
-              <Button 
+              <Button
                 onClick={handleGenerateAllDue}
-                style={{ backgroundColor: '#28a745' }}
+                className="bg-green-500 hover:bg-green-600 text-white"
               >
                 Generate All ({dueTransactions.length})
               </Button>
@@ -194,55 +191,42 @@ function DueTransactionsReview() {
               const missedCount = calculateMissedOccurrences(transaction);
               
               return (
-                <div 
+                <div
                   key={transaction.id}
-                  style={{ 
-                    padding: '15px',
-                    marginBottom: '15px',
-                    backgroundColor: '#f8f9fa',
-                    border: '1px solid #dee2e6',
-                    borderRadius: '8px',
-                    borderLeft: `4px solid ${transaction.type === 'income' ? '#28a745' : '#dc3545'}`
-                  }}
+                  className={`p-4 mb-4 bg-gray-50 border rounded-lg ${
+                    transaction.type === 'income' ? 'border-l-4 border-green-500' : 'border-l-4 border-red-500'
+                  }`}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                        <h4 style={{ margin: 0, color: transaction.type === 'income' ? '#28a745' : '#dc3545' }}>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className={`m-0 ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
                           {transaction.description}
                         </h4>
-                        <span style={{ 
-                          fontSize: '0.8em',
-                          padding: '2px 8px',
-                          borderRadius: '12px',
-                          backgroundColor: transaction.type === 'income' ? '#d4edda' : '#f8d7da',
-                          color: transaction.type === 'income' ? '#155724' : '#721c24'
-                        }}>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          transaction.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
                           {transaction.type}
                         </span>
                       </div>
                       
-                      <div style={{ fontSize: '0.9em', color: '#666', marginBottom: '8px' }}>
-                        <strong style={{ fontSize: '1.1em' }}>${transaction.amount.toFixed(2)}</strong>
+                      <div className="text-sm text-gray-600 mb-2">
+                        <strong className="text-base">${transaction.amount.toFixed(2)}</strong>
                         {transaction.category && ` • ${transaction.category}`}
                         {` • ${formatFrequency(transaction.frequency)}`}
                       </div>
                       
-                      <div style={{ fontSize: '0.85em', color: '#dc3545', fontWeight: 'bold' }}>
+                      <div className="text-xs text-red-600 font-bold">
                         {formatDueDate(transaction.nextDueDate)}
                         {missedCount > 1 && ` (${missedCount} occurrences behind)`}
                       </div>
                     </div>
                     
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div className="flex gap-2">
                       <Button
                         onClick={() => handleGenerateTransaction(transaction)}
                         disabled={isProcessing}
-                        style={{ 
-                          backgroundColor: '#28a745',
-                          fontSize: '0.8em',
-                          padding: '8px 16px'
-                        }}
+                        className="bg-green-500 hover:bg-green-600 text-white text-xs px-4 py-2"
                       >
                         {isProcessing ? 'Adding...' : 'Add Transaction'}
                       </Button>
@@ -250,11 +234,7 @@ function DueTransactionsReview() {
                       <Button
                         onClick={() => handleSkipTransaction(transaction)}
                         disabled={isProcessing}
-                        style={{ 
-                          backgroundColor: '#6c757d',
-                          fontSize: '0.8em',
-                          padding: '8px 16px'
-                        }}
+                        className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-4 py-2"
                       >
                         Skip
                       </Button>
@@ -262,15 +242,8 @@ function DueTransactionsReview() {
                   </div>
                   
                   {missedCount > 1 && (
-                    <div style={{
-                      marginTop: '10px',
-                      padding: '8px',
-                      backgroundColor: '#fff3cd',
-                      borderRadius: '4px',
-                      fontSize: '0.8em',
-                      color: '#856404'
-                    }}>
-                      💡 This transaction has {missedCount} missed occurrences. 
+                    <div className="mt-3 p-2 bg-yellow-100 rounded text-xs text-yellow-800">
+                      💡 This transaction has {missedCount} missed occurrences.
                       Consider generating them manually or adjusting the due date.
                     </div>
                   )}

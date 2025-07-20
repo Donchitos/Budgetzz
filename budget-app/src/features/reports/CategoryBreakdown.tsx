@@ -90,14 +90,14 @@ const CategoryBreakdown: React.FC<CategoryBreakdownProps> = ({ currentExpenses, 
   return (
     <div>
       <Doughnut data={chartData} options={options} />
-      <div style={{ marginTop: '20px' }}>
+      <div className="mt-5">
         <h4>Category Details</h4>
         <ul>
           {categoryDetails.map(detail => (
             <li key={detail.label}>
               <strong>{detail.label}:</strong> ${detail.currentAmount.toFixed(2)}
               {detail.percentageChange !== null && (
-                <span style={{ color: detail.percentageChange >= 0 ? 'green' : 'red', marginLeft: '10px' }}>
+                <span className={`ml-2 ${detail.percentageChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   ({detail.percentageChange.toFixed(1)}%)
                 </span>
               )}

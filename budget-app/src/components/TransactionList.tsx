@@ -19,7 +19,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
   return (
     <Card title={title}>
       {transactions.length === 0 ? (
-        <p style={{ textAlign: "center", color: "var(--neutral-gray-dark)" }}>
+        <p className="text-center text-gray-500">
           No transactions recorded.
         </p>
       ) : (
@@ -40,7 +40,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   <Button
                     onClick={() => onDelete(transaction.id)}
                     variant="destructive"
-                    style={{ fontSize: "0.8em", padding: "6px 12px" }}
+                    className="text-xs py-1 px-2"
                   >
                     Delete
                   </Button>

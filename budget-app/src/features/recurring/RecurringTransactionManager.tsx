@@ -8,6 +8,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { calculateNextDueDate } from '../../types/recurringUtils';
 import type { RecurringTransaction } from '../../types';
+import Skeleton from '../../components/Skeleton';
 
 const frequencies = [
   { value: 'weekly', label: 'Weekly' },
@@ -157,14 +158,14 @@ function RecurringTransactionManager() {
   return (
     <div>
       <Card title="Create Recurring Transaction">
-        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
+        <form onSubmit={handleSubmit} className="mb-5">
+          <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Type</label>
-              <select 
-                value={type} 
+              <label className="block mb-1 font-bold">Type</label>
+              <select
+                value={type}
                 onChange={(e) => setType(e.target.value as 'income' | 'expense')}
-                style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+                className="w-full p-2 border border-gray-300 rounded"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -172,11 +173,11 @@ function RecurringTransactionManager() {
             </div>
             
             <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Frequency</label>
-              <select 
-                value={frequency} 
+              <label className="block mb-1 font-bold">Frequency</label>
+              <select
+                value={frequency}
                 onChange={(e) => setFrequency(e.target.value)}
-                style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+                className="w-full p-2 border border-gray-300 rounded"
               >
                 {frequencies.map(freq => (
                   <option key={freq.value} value={freq.value}>{freq.label}</option>
@@ -185,7 +186,7 @@ function RecurringTransactionManager() {
             </div>
           </div>
 
-          <div style={{ marginBottom: '15px' }}>
+          <div className="mb-4">
             <Input
               type="text"
               value={description}
@@ -195,7 +196,7 @@ function RecurringTransactionManager() {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: type === 'expense' ? '1fr 1fr' : '1fr', gap: '15px', marginBottom: '15px' }}>
+          <div className={`grid ${type === 'expense' ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mb-4`}>
             <Input
               type="number"
               value={amount}
@@ -207,10 +208,10 @@ function RecurringTransactionManager() {
             />
             
             {type === 'expense' && (
-              <select 
-                value={category} 
+              <select
+                value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+                className="p-2 border border-gray-300 rounded"
               >
                 {expenseCategories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
@@ -219,9 +220,9 @@ function RecurringTransactionManager() {
             )}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: hasEndDate ? '1fr 1fr' : '1fr', gap: '15px', marginBottom: '15px' }}>
+          <div className={`grid ${hasEndDate ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mb-4`}>
             <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Start Date</label>
+              <label className="block mb-1 font-bold">Start Date</label>
               <Input
                 type="date"
                 value={startDate}
@@ -232,7 +233,7 @@ function RecurringTransactionManager() {
             
             {hasEndDate && (
               <div>
-                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>End Date</label>
+                <label className="block mb-1 font-bold">End Date</label>
                 <Input
                   type="date"
                   value={endDate}
@@ -243,8 +244,8 @@ function RecurringTransactionManager() {
             )}
           </div>
 
-          <div style={{ marginBottom: '15px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="mb-4">
+            <label className="flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={hasEndDate}
@@ -259,11 +260,17 @@ function RecurringTransactionManager() {
       </Card>
 
       <Card title="Your Recurring Transactions">
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <div className="p-4">
+            <Skeleton className="h-8 w-full mb-4" />
+            <Skeleton className="h-8 w-full mb-4" />
+            <Skeleton className="h-8 w-full" />
+          </div>
+        )}
         {error && <p>Error loading recurring transactions.</p>}
         
-        {recurringTransactions.length === 0 ? (
-          <p style={{ color: '#666', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
+        {!loading && recurringTransactions.length === 0 ? (
+          <p className="text-gray-500 italic text-center p-5">
             No recurring transactions set up yet. Create your first one above!
           </p>
         ) : (
@@ -271,74 +278,55 @@ function RecurringTransactionManager() {
             {recurringTransactions
               .sort((a, b) => (a.isActive === b.isActive) ? 0 : a.isActive ? -1 : 1)
               .map(transaction => (
-                <div 
-                  key={transaction.id} 
-                  style={{ 
-                    padding: '15px',
-                    marginBottom: '15px',
-                    backgroundColor: transaction.isActive ? '#f8f9fa' : '#f8f8f8',
-                    border: `1px solid ${transaction.isActive ? '#e9ecef' : '#dee2e6'}`,
-                    borderRadius: '8px',
-                    opacity: transaction.isActive ? 1 : 0.7
-                  }}
+                <div
+                  key={transaction.id}
+                  className={`p-4 mb-4 rounded-lg border ${
+                    transaction.isActive
+                      ? 'bg-gray-50 border-gray-200'
+                      : 'bg-gray-100 border-gray-300 opacity-70'
+                  }`}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                        <h4 style={{ margin: 0, color: transaction.type === 'income' ? '#28a745' : '#dc3545' }}>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className={`m-0 ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
                           {transaction.description}
                         </h4>
-                        <span style={{ 
-                          fontSize: '0.8em',
-                          padding: '2px 8px',
-                          borderRadius: '12px',
-                          backgroundColor: transaction.type === 'income' ? '#d4edda' : '#f8d7da',
-                          color: transaction.type === 'income' ? '#155724' : '#721c24'
-                        }}>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          transaction.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
                           {transaction.type}
                         </span>
                         {!transaction.isActive && (
-                          <span style={{ 
-                            fontSize: '0.8em',
-                            padding: '2px 8px',
-                            borderRadius: '12px',
-                            backgroundColor: '#6c757d',
-                            color: 'white'
-                          }}>
+                          <span className="text-xs px-2 py-1 rounded-full bg-gray-500 text-white">
                             PAUSED
                           </span>
                         )}
                       </div>
                       
-                      <div style={{ fontSize: '0.9em', color: '#666', marginBottom: '8px' }}>
+                      <div className="text-sm text-gray-600 mb-2">
                         <strong>${transaction.amount.toFixed(2)}</strong> • {transaction.frequency}
                         {transaction.category && ` • ${transaction.category}`}
                       </div>
                       
-                      <div style={{ fontSize: '0.85em', color: '#666' }}>
+                      <div className="text-xs text-gray-500">
                         Next due: <strong>{formatNextDue(transaction.nextDueDate)}</strong>
                       </div>
                     </div>
                     
-                    <div style={{ display: 'flex', gap: '8px' }}>
+                    <div className="flex gap-2">
                       <Button
                         onClick={() => handleToggleActive(transaction.id, transaction.isActive)}
-                        style={{ 
-                          backgroundColor: transaction.isActive ? '#ffc107' : '#28a745',
-                          fontSize: '0.8em',
-                          padding: '6px 12px'
-                        }}
+                        className={`text-xs px-3 py-1 ${
+                          transaction.isActive ? 'bg-yellow-400 hover:bg-yellow-500' : 'bg-green-500 hover:bg-green-600'
+                        } text-white`}
                       >
                         {transaction.isActive ? 'Pause' : 'Resume'}
                       </Button>
                       
                       <Button
                         onClick={() => handleDelete(transaction.id, transaction.description)}
-                        style={{ 
-                          backgroundColor: '#dc3545',
-                          fontSize: '0.8em',
-                          padding: '6px 12px'
-                        }}
+                        className="text-xs px-3 py-1 bg-red-500 hover:bg-red-600 text-white"
                       >
                         Delete
                       </Button>

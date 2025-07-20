@@ -58,7 +58,7 @@ const ReportExporter: React.FC<ReportExporterProps> = ({ income, expenses, filen
   };
 
   return (
-    <button onClick={handleExport} style={{ marginTop: '20px', padding: '10px 15px' }}>
+    <button onClick={handleExport} className="mt-5 py-2 px-4">
       Download CSV
     </button>
   );

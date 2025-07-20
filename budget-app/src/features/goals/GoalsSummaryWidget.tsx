@@ -4,6 +4,7 @@ import type { FinancialGoal } from '../../types/goals';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
 import Card from '../../components/Card';
+import Skeleton from '../../components/Skeleton';
 import './GoalsSummaryWidget.css';
 
 ChartJS.register(ArcElement, Tooltip);
@@ -43,7 +44,28 @@ const GoalProgressChart = ({ goal }: { goal: FinancialGoal }) => {
 const GoalsSummaryWidget: React.FC = () => {
   const { snapshot, loading, error } = useFirestoreCollection('financial-goals');
 
-  if (loading) return <p>Loading goals summary...</p>;
+  if (loading) {
+    return (
+      <Card title="Goals Summary">
+        <div className="goals-summary-widget">
+          <div className="goal-item">
+            <Skeleton className="h-16 w-16 rounded-full" />
+            <div className="flex-1">
+              <Skeleton className="h-4 w-3/4 mb-2" />
+              <Skeleton className="h-3 w-1/2" />
+            </div>
+          </div>
+          <div className="goal-item">
+            <Skeleton className="h-16 w-16 rounded-full" />
+            <div className="flex-1">
+              <Skeleton className="h-4 w-3/4 mb-2" />
+              <Skeleton className="h-3 w-1/2" />
+            </div>
+          </div>
+        </div>
+      </Card>
+    );
+  }
   if (error) return <p>Error loading goals: {error.message}</p>;
 
   const goals: FinancialGoal[] = snapshot ? snapshot.docs.map(doc => ({

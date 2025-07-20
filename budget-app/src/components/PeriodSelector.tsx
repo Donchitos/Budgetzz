@@ -38,27 +38,12 @@ const PeriodSelector: React.FC<PeriodSelectorProps> = ({ selectedDate, onDateCha
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '15px', 
-      marginBottom: '20px',
-      padding: '15px',
-      backgroundColor: '#f8f9fa',
-      borderRadius: '8px',
-      border: '1px solid #e9ecef'
-    }}>
+    <div className="flex items-center gap-4 mb-5 p-4 bg-gray-50 rounded-lg border border-gray-200">
       <Button onClick={goToPreviousMonth}>
         ← Previous
       </Button>
       
-      <div style={{ 
-        flex: 1, 
-        textAlign: 'center', 
-        fontSize: '1.2em', 
-        fontWeight: 'bold',
-        color: '#2c3e50'
-      }}>
+      <div className="flex-1 text-center text-lg font-bold text-gray-800">
         {monthNames[currentMonth]} {currentYear}
       </div>
       
@@ -67,12 +52,9 @@ const PeriodSelector: React.FC<PeriodSelectorProps> = ({ selectedDate, onDateCha
       </Button>
       
       {!isCurrentMonth() && (
-        <Button 
+        <Button
           onClick={goToCurrentMonth}
-          style={{ 
-            backgroundColor: '#28a745',
-            marginLeft: '10px'
-          }}
+          className="bg-green-500 hover:bg-green-600 text-white ml-2"
         >
           Current Month
         </Button>
