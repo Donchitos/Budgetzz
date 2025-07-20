@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FinancialInsights from './FinancialInsights';
 import GoalsSummaryWidget from '../goals/GoalsSummaryWidget';
 import TransactionList from '../../components/TransactionList';
@@ -11,9 +11,12 @@ import BalanceOverview from './BalanceOverview';
 import QuickActions from './QuickActions';
 import "./Dashboard.css";
 
-function Dashboard() {
-  const [selectedPeriod, setSelectedPeriod] = useState<Date>(getCurrentMonth());
-  
+interface DashboardProps {
+  selectedPeriod: Date;
+  setSelectedPeriod: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+function Dashboard({ selectedPeriod, setSelectedPeriod }: DashboardProps) {
   const {
     income,
     expenses,
@@ -64,7 +67,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <DashboardHeader />
+      <DashboardHeader selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod} />
       <BalanceOverview
         balance={balance}
         totalIncome={totalIncome}

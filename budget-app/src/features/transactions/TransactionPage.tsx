@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import IncomeTracker from './IncomeTracker';
 import ExpenseTracker from './ExpenseTracker';
 import PeriodSelector from '../../components/PeriodSelector';
@@ -7,8 +7,12 @@ import { getCurrentMonth } from '../../utils/dateUtils';
 import Skeleton from '../../components/Skeleton';
 import './TransactionPage.css';
 
-const TransactionPage: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState<Date>(getCurrentMonth());
+interface TransactionPageProps {
+  selectedPeriod: Date;
+  setSelectedPeriod: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+const TransactionPage: React.FC<TransactionPageProps> = ({ selectedPeriod, setSelectedPeriod }) => {
   const { income, expenses, loading, error } = useData(selectedPeriod);
 
   if (loading) {

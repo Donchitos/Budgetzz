@@ -1,11 +1,23 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { setBudget, deleteBudget } from '../../services/api';
+import useFirestoreCollection from '../../hooks/useFirestoreCollection';
+import type { Budget } from '../../types';
 
 export const useBudget = (selectedPeriod: Date) => {
+  const { snapshot, loading: collectionLoading, error: collectionError } = useFirestoreCollection('budgets');
   const [category, setCategory] = useState('Food');
   const [budgetAmount, setBudgetAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const budgets = useMemo(() => {
+    if (!snapshot) return [];
+    const month = selectedPeriod.getMonth() + 1;
+    const year = selectedPeriod.getFullYear();
+    return snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() } as Budget))
+      .filter(budget => budget.month === month && budget.year === year);
+  }, [snapshot, selectedPeriod]);
 
   const handleSetBudget = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,12 +56,13 @@ export const useBudget = (selectedPeriod: Date) => {
   };
 
   return {
+    budgets,
     category,
     setCategory,
     budgetAmount,
     setBudgetAmount,
-    loading,
-    error,
+    loading: loading || collectionLoading,
+    error: error || collectionError?.message || null,
     handleSetBudget,
     handleDeleteBudget,
   };
