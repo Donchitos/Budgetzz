@@ -59,29 +59,3 @@
 .transaction-form select {
   flex: 1;
 }
-.tracker-summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.tracker-summary h2 {
-  margin: 0;
-  font-size: 1.2em;
-}
-
-.tracker-summary h2.income {
-  color: var(--primary-green);
-}
-
-.tracker-summary h2.expense {
-  color: var(--primary-red);
-}
-
-.tracker-summary .count {
-  font-size: 0.9em;
-  color: var(--neutral-gray-dark);
-}

@@ -1,0 +1,49 @@
+.reports-page {
+  padding: 20px;
+}
+
+.reports-page h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.reports-page .grid {
+  display: grid;
+  gap: 20px;
+}
+
+.reports-page .grid-cols-2fr-1fr {
+  grid-template-columns: 2fr 1fr;
+}
+
+.reports-page .max-w-3xl {
+  max-width: 48rem;
+}
+
+.reports-page .max-w-md {
+  max-width: 28rem;
+}
+
+.reports-page .mt-5 {
+  margin-top: 1.25rem;
+}
+
+.reports-page .mt-8 {
+  margin-top: 2rem;
+}
+
+.reports-page .mb-4 {
+  margin-bottom: 1rem;
+}
+
+.reports-page .h-12 {
+  height: 3rem;
+}
+
+.reports-page .w-full {
+  width: 100%;
+}
+
+.reports-page .h-96 {
+  height: 24rem;
+}

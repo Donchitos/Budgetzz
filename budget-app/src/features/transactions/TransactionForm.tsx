@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import { useTransactionForm } from "../../hooks/useTransactionForm";
 import "./Transaction.css";
 
 interface TransactionFormProps {
@@ -16,25 +17,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   onAddTransaction,
   transactionType,
 }) => {
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("Food");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const parsedAmount = parseFloat(amount);
-    if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      alert("Please enter a valid amount greater than 0.");
-      return;
-    }
-    onAddTransaction(
-      description,
-      parsedAmount,
-      transactionType === "Expense" ? category : undefined
-    );
-    setDescription("");
-    setAmount("");
-  };
+  const {
+    description,
+    setDescription,
+    amount,
+    setAmount,
+    category,
+    setCategory,
+    handleSubmit,
+  } = useTransactionForm({ onAddTransaction, transactionType });
 
   return (
     <form onSubmit={handleSubmit} className="transaction-form">

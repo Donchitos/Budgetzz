@@ -1,64 +1,27 @@
-// src/features/reports/ReportsPage.tsx
-import React, { useState, useMemo } from 'react';
-import { subMonths, startOfDay, endOfDay } from 'date-fns';
-import type { DateRange, ComparisonMode, Transaction } from '../../types';
-import { useAnalyticsData } from '../../hooks/useAnalyticsData';
+import React from 'react';
+import './Reports.css';
 import DateRangeSelector from './DateRangeSelector';
 import TrendChart from './TrendChart';
 import CategoryBreakdown from './CategoryBreakdown';
 import AdvancedFilterControls from './AdvancedFilterControls';
-import type { ReportFilters } from './AdvancedFilterControls';
 import ReportExporter from './ReportExporter';
 import Skeleton from '../../components/Skeleton';
+import { useReportData } from './useReportData';
 
 const ReportsPage: React.FC = () => {
-  const [dateRange, setDateRange] = useState<DateRange>({
-    start: startOfDay(subMonths(new Date(), 6)),
-    end: endOfDay(new Date()),
-  });
-  const [comparison, setComparison] = useState<ComparisonMode>('none');
-  const [filters, setFilters] = useState<ReportFilters>({
-    searchTerm: '',
-    categories: [],
-  });
-
-  const { current, previous, loading, error } = useAnalyticsData(dateRange, comparison);
-
-  const filteredData = useMemo(() => {
-    const filterTransactions = (transactions: Transaction[]): Transaction[] => {
-      return transactions.filter(t => {
-        const searchTermMatch = filters.searchTerm
-          ? t.description.toLowerCase().includes(filters.searchTerm.toLowerCase())
-          : true;
-        const categoryMatch = filters.categories.length > 0
-          ? t.category && filters.categories.includes(t.category)
-          : true;
-        return searchTermMatch && categoryMatch;
-      });
-    };
-
-    return {
-      current: {
-        income: filterTransactions(current.income),
-        expenses: filterTransactions(current.expenses),
-      },
-      previous: {
-        income: filterTransactions(previous.income),
-        expenses: filterTransactions(previous.expenses),
-      }
-    };
-  }, [current, previous, filters]);
-
-  const availableCategories = useMemo(() => {
-    const allCategories = new Set<string>();
-    current.expenses.forEach(e => {
-      if (e.category) allCategories.add(e.category);
-    });
-    previous.expenses.forEach(e => {
-      if (e.category) allCategories.add(e.category);
-    });
-    return Array.from(allCategories).sort();
-  }, [current.expenses, previous.expenses]);
+  const {
+    dateRange,
+    setDateRange,
+    comparison,
+    setComparison,
+    filters,
+    setFilters,
+    filteredData,
+    availableCategories,
+    loading,
+    error,
+    originalData,
+  } = useReportData();
 
   if (loading) {
     return (
@@ -97,12 +60,12 @@ const ReportsPage: React.FC = () => {
       
       <div className="mt-5">
         <h3>Data Overview</h3>
-        <p>Total Income Records: {filteredData.current.income.length} (of {current.income.length})</p>
-        <p>Total Expense Records: {filteredData.current.expenses.length} (of {current.expenses.length})</p>
+        <p>Total Income Records: {filteredData.current.income.length} (of {originalData.current.income.length})</p>
+        <p>Total Expense Records: {filteredData.current.expenses.length} (of {originalData.current.expenses.length})</p>
         {comparison !== 'none' && (
           <>
-            <p>Previous Income Records: {filteredData.previous.income.length} (of {previous.income.length})</p>
-            <p>Previous Expense Records: {filteredData.previous.expenses.length} (of {previous.expenses.length})</p>
+            <p>Previous Income Records: {filteredData.previous.income.length} (of {originalData.previous.income.length})</p>
+            <p>Previous Expense Records: {filteredData.previous.expenses.length} (of {originalData.previous.expenses.length})</p>
           </>
         )}
       </div>
