@@ -4,6 +4,7 @@ import { getUpcomingRecurringTransactions } from '../types/recurringUtils';
 interface ProjectionPoint {
   date: Date;
   balance: number;
+  transactions: RecurringTransaction[];
 }
 
 export function calculateBalanceProjection(
@@ -16,7 +17,7 @@ export function calculateBalanceProjection(
   const today = new Date();
 
   // Add the starting balance
-  projection.push({ date: today, balance: projectedBalance });
+  projection.push({ date: today, balance: projectedBalance, transactions: [] });
 
   for (let i = 1; i <= daysToProject; i++) {
     const futureDate = new Date(today);
@@ -45,7 +46,7 @@ export function calculateBalanceProjection(
         projectedBalance += dailyNet;
     }
 
-    projection.push({ date: futureDate, balance: projectedBalance });
+    projection.push({ date: futureDate, balance: projectedBalance, transactions: transactionsForDay });
   }
 
   return projection;

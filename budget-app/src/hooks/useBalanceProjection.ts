@@ -2,12 +2,18 @@ import { useState, useEffect } from 'react';
 import { calculateBalanceProjection } from '../utils/projectionUtils';
 import type { RecurringTransaction } from '../types';
 
+interface ProjectionPoint {
+  date: Date;
+  balance: number;
+  transactions: RecurringTransaction[];
+}
+
 export const useBalanceProjection = (
   currentBalance: number,
   recurringTransactions: RecurringTransaction[],
   daysToProject: number
 ) => {
-  const [projection, setProjection] = useState<{ date: Date; balance: number; }[]>([]);
+  const [projection, setProjection] = useState<ProjectionPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
