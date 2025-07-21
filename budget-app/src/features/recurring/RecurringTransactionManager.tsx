@@ -1,4 +1,5 @@
 // src/features/recurring/RecurringTransactionManager.tsx
+// src/features/recurring/RecurringTransactionManager.tsx
 import React, { useState } from 'react';
 import { collection, addDoc, deleteDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../../services/firebase';
@@ -9,6 +10,7 @@ import Button from '../../components/Button';
 import { calculateNextDueDate } from '../../types/recurringUtils';
 import type { RecurringTransaction } from '../../types';
 import Skeleton from '../../components/Skeleton';
+import './RecurringTransactionManager.css';
 
 const frequencies = [
   { value: 'weekly', label: 'Weekly' },
@@ -148,55 +150,53 @@ function RecurringTransactionManager() {
 
   const formatNextDue = (nextDueDate: any) => {
     const date = nextDueDate?.toDate ? nextDueDate.toDate() : new Date(nextDueDate);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
   return (
-    <div>
-      <Card title="Create Recurring Transaction">
-        <form onSubmit={handleSubmit} className="mb-5">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block mb-1 font-bold">Type</label>
-              <select
-                value={type}
-                onChange={(e) => setType(e.target.value as 'income' | 'expense')}
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="block mb-1 font-bold">Frequency</label>
-              <select
-                value={frequency}
-                onChange={(e) => setFrequency(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                {frequencies.map(freq => (
-                  <option key={freq.value} value={freq.value}>{freq.label}</option>
-                ))}
-              </select>
-            </div>
+    <div className="recurring-manager-layout">
+      <Card title="Create Recurring Transaction" className="form-card">
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Type</label>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value as 'income' | 'expense')}
+            >
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label>Frequency</label>
+            <select
+              value={frequency}
+              onChange={(e) => setFrequency(e.target.value)}
+            >
+              {frequencies.map(freq => (
+                <option key={freq.value} value={freq.value}>{freq.label}</option>
+              ))}
+            </select>
           </div>
 
-          <div className="mb-4">
+          <div className="form-group">
+            <label>Description</label>
             <Input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder={`${type === 'income' ? 'Income' : 'Expense'} description (e.g., "Monthly Rent", "Salary")`}
+              placeholder={`${type === 'income' ? 'Income' : 'Expense'} description`}
               required
             />
           </div>
 
-          <div className={`grid ${type === 'expense' ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mb-4`}>
+          <div className="form-group">
+            <label>Amount</label>
             <Input
               type="number"
               value={amount}
@@ -206,60 +206,60 @@ function RecurringTransactionManager() {
               step="0.01"
               min="0"
             />
+          </div>
             
-            {type === 'expense' && (
+          {type === 'expense' && (
+            <div className="form-group">
+              <label>Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="p-2 border border-gray-300 rounded"
               >
                 {expenseCategories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
-            )}
-          </div>
+            </div>
+          )}
 
-          <div className={`grid ${hasEndDate ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mb-4`}>
-            <div>
-              <label className="block mb-1 font-bold">Start Date</label>
+          <div className="form-group">
+            <label>Start Date</label>
+            <Input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              required
+            />
+          </div>
+            
+          {hasEndDate && (
+            <div className="form-group">
+              <label>End Date</label>
               <Input
                 type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                required
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                required={hasEndDate}
               />
             </div>
-            
-            {hasEndDate && (
-              <div>
-                <label className="block mb-1 font-bold">End Date</label>
-                <Input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  required={hasEndDate}
-                />
-              </div>
-            )}
-          </div>
+          )}
 
-          <div className="mb-4">
+          <div className="form-group">
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={hasEndDate}
                 onChange={(e) => setHasEndDate(e.target.checked)}
               />
-              Set an end date (optional)
+              Set an end date
             </label>
           </div>
 
-          <Button type="submit">Create Recurring {type === 'income' ? 'Income' : 'Expense'}</Button>
+          <Button type="submit" className="w-full">Create Recurring {type === 'income' ? 'Income' : 'Expense'}</Button>
         </form>
       </Card>
 
-      <Card title="Your Recurring Transactions">
+      <Card title="Your Recurring Transactions" className="list-card">
         {loading && (
           <div className="p-4">
             <Skeleton className="h-8 w-full mb-4" />
@@ -271,50 +271,29 @@ function RecurringTransactionManager() {
         
         {!loading && recurringTransactions.length === 0 ? (
           <p className="text-gray-500 italic text-center p-5">
-            No recurring transactions set up yet. Create your first one above!
+            No recurring transactions set up yet.
           </p>
         ) : (
           <div>
             {recurringTransactions
               .sort((a, b) => (a.isActive === b.isActive) ? 0 : a.isActive ? -1 : 1)
               .map(transaction => (
-                <div
-                  key={transaction.id}
-                  className={`p-4 mb-4 rounded-lg border ${
-                    transaction.isActive
-                      ? 'bg-gray-50 border-gray-200'
-                      : 'bg-gray-100 border-gray-300 opacity-70'
-                  }`}
-                >
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className={`m-0 ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
-                          {transaction.description}
-                        </h4>
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          transaction.type === 'income' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                          {transaction.type}
-                        </span>
-                        {!transaction.isActive && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-gray-500 text-white">
-                            PAUSED
-                          </span>
-                        )}
-                      </div>
-                      
-                      <div className="text-sm text-gray-600 mb-2">
+                <div key={transaction.id} className="transaction-item">
+                  <div className="transaction-details">
+                    <div className="transaction-info">
+                      <h4 className={`m-0 font-bold ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                        {transaction.description}
+                      </h4>
+                      <div className="text-sm text-gray-600">
                         <strong>${transaction.amount.toFixed(2)}</strong> • {transaction.frequency}
                         {transaction.category && ` • ${transaction.category}`}
                       </div>
-                      
                       <div className="text-xs text-gray-500">
                         Next due: <strong>{formatNextDue(transaction.nextDueDate)}</strong>
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="transaction-actions">
                       <Button
                         onClick={() => handleToggleActive(transaction.id, transaction.isActive)}
                         className={`text-xs px-3 py-1 ${
@@ -332,6 +311,11 @@ function RecurringTransactionManager() {
                       </Button>
                     </div>
                   </div>
+                  {!transaction.isActive && (
+                    <div className="text-xs px-2 py-1 rounded-full bg-gray-500 text-white mt-2 self-start">
+                      PAUSED
+                    </div>
+                  )}
                 </div>
               ))}
           </div>

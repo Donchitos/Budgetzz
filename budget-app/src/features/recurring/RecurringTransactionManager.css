@@ -1,0 +1,41 @@
+.recurring-manager-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.form-card, .list-card {
+  grid-column: span 1;
+}
+
+@media (max-width: 1024px) {
+  .recurring-manager-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.transaction-item {
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.transaction-actions {
+  display: flex;
+  gap: 0.5rem;
+}
