@@ -12,9 +12,10 @@ const Navigation: React.FC = () => {
     return (
       <nav className="navigation desktop" aria-label="Main navigation">
         <div className="nav-logo">
-          <NavLink to="/transactions">BudgetApp</NavLink>
+          <NavLink to="/dashboard">BudgetApp</NavLink>
         </div>
         <div className="nav-links">
+          <NavLink to="/dashboard">Dashboard</NavLink>
           <NavLink to="/recurring">Recurring</NavLink>
           <NavLink to="/goals">Goals</NavLink>
           <NavLink to="/budgets">Budgets</NavLink>
@@ -31,7 +32,7 @@ const Navigation: React.FC = () => {
 
   return (
     <nav className="navigation mobile" aria-label="Main navigation">
-      <NavLink to="/transactions"><Home /></NavLink>
+      <NavLink to="/dashboard"><Home /></NavLink>
       <NavLink to="/reports"><BarChart2 /></NavLink>
       <NavLink to="/budgets"><CircleDollarSign /></NavLink>
       <NavLink to="/recurring"><Repeat /></NavLink>
