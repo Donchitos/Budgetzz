@@ -3,26 +3,8 @@ import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import type { FinancialGoal } from '../../types/goals';
 import Card from '../../components/Card';
 import Skeleton from '../../components/Skeleton';
+import ProgressBar from '../gamification/ProgressBar';
 import './GoalsSummaryWidget.css';
-
-const GoalProgressBar = ({ goal }: { goal: FinancialGoal }) => {
-  const percentage = goal.targetAmount > 0 ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
-
-  return (
-    <div className="goal-item">
-      <div className="goal-title">{goal.title}</div>
-      <div className="goal-progress">
-        <div className="progress-bar-container">
-          <div className="progress-bar" style={{ width: `${percentage}%` }}></div>
-        </div>
-        <span className="progress-text">{Math.round(percentage)}%</span>
-      </div>
-      <div className="goal-amount">
-        ${goal.currentAmount.toLocaleString()} / ${goal.targetAmount.toLocaleString()}
-      </div>
-    </div>
-  );
-};
 
 const GoalsSummaryWidget: React.FC = () => {
   const { snapshot, loading, error } = useFirestoreCollection('financial-goals');
@@ -51,9 +33,21 @@ const GoalsSummaryWidget: React.FC = () => {
     <Card title="Goals Progress">
       <div className="goals-summary-widget">
         {goals.length > 0 ? (
-          goals.slice(0, 3).map((goal) => (
-            <GoalProgressBar key={goal.id} goal={goal} />
-          ))
+          goals.slice(0, 3).map((goal) => {
+            const percentage = goal.targetAmount > 0 ? (goal.currentAmount / goal.targetAmount) * 100 : 0;
+            return (
+              <div key={goal.id} className="goal-item">
+                <div className="goal-title">{goal.title}</div>
+                <div className="goal-progress">
+                  <ProgressBar value={goal.currentAmount} max={goal.targetAmount} />
+                  <span className="progress-text">{Math.round(percentage)}%</span>
+                </div>
+                <div className="goal-amount">
+                  ${goal.currentAmount.toLocaleString()} / ${goal.targetAmount.toLocaleString()}
+                </div>
+              </div>
+            );
+          })
         ) : (
           <p>No goals yet. Create one in the Goals tab!</p>
         )}

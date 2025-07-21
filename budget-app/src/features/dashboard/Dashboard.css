@@ -12,8 +12,11 @@
   padding-left: 2rem;
   padding-right: 2rem;
   padding-bottom: 2rem;
-  max-width: 1400px;
   margin: 0 auto;
+}
+
+.main-content.dashboard-full-width {
+  max-width: 100%;
 }
 
 /* Dashboard container */

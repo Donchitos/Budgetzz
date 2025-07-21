@@ -9,7 +9,7 @@ const DashboardMainContent: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="main-content">
+    <div className="main-content dashboard-full-width">
       <DashboardHeader userName={user?.displayName || 'User'} />
       <div className="dashboard-container">
         <DashboardColumns />

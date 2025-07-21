@@ -9,10 +9,7 @@ interface DashboardHeaderProps {
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userName }) => {
   return (
     <header className="dashboard-header">
-      <div className="user-info">
-        <h2>Hello, {userName}!</h2>
-        <p>Let's make today a great financial day.</p>
-      </div>
+      <div className="user-info"></div>
       <div className="header-actions">
         <button className="icon-button">
           <Bell />
