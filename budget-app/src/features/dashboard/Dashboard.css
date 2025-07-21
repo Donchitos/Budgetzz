@@ -1,0 +1,44 @@
+.dashboard-layout {
+  display: flex;
+}
+
+.main-content {
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+  margin-left: 250px; /* Same as navigation width */
+}
+
+.main-content.collapsed {
+  margin-left: 60px; /* Same as collapsed navigation width */
+}
+
+.dashboard-container {
+  padding: 2rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.grid-item-large {
+  grid-column: span 2;
+}
+
+.grid-item-medium {
+  grid-column: span 1;
+}
+
+.grid-item-wide {
+  grid-column: span 4;
+}
+
+.grid-item-standard {
+  grid-column: span 1;
+}
+
+.quick-actions-buttons {
+  display: flex;
+  justify-content: space-around;
+}

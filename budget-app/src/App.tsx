@@ -17,6 +17,7 @@ const ReportsPage = lazy(() => import('./features/reports/ReportsPage'));
 const TransactionPage = lazy(() => import('./features/transactions/TransactionPage'));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
 const RecurringTransactionManager = lazy(() => import('./features/recurring/RecurringTransactionManager'));
+const Dashboard = lazy(() => import('./features/dashboard/Dashboard'));
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -40,8 +41,9 @@ function App() {
         <main className="main-content">
           <Suspense fallback={<div className="p-8"><Skeleton className="h-screen w-full" /></div>}>
             <Routes>
-              <Route path="/" element={!user ? <Login /> : <Navigate to="/transactions" />} />
-              <Route path="/register" element={!user ? <Register /> : <Navigate to="/transactions" />} />
+              <Route path="/" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+              <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
+              <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
               <Route path="/settings" element={user ? <SettingsPage /> : <Navigate to="/" />} />
               <Route path="/transactions" element={user ? <TransactionPage selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod} /> : <Navigate to="/" />} />
               <Route path="/budgets" element={user ? <BudgetManager budgets={budgets} selectedPeriod={selectedPeriod} /> : <Navigate to="/" />} />

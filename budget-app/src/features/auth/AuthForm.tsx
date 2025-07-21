@@ -22,18 +22,20 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   } = useAuthForm(mode);
 
   const isLogin = mode === 'login';
-  const title = isLogin ? 'Welcome Back' : 'Create Your Account';
-  const buttonText = isLogin ? 'Login Securely' : 'Create Account';
-  const footerText = isLogin ? "Don't have an account?" : 'Already have an account?';
+  const title = isLogin ? 'Welcome back!' : 'Get Started';
+  const buttonText = isLogin ? 'Log In' : 'Sign Up';
+  const footerText = isLogin
+    ? "Don't have an account?"
+    : 'Already have an account?';
   const footerLink = isLogin ? '/register' : '/';
-  const footerLinkText = isLogin ? 'Create one now' : 'Login here';
+  const footerLinkText = isLogin ? 'Sign up' : 'Log in';
 
   return (
     <div className="auth-container">
       <Card title={title} className="auth-card">
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="input-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Your Email</label>
             <Input
               id="email"
               type="email"
@@ -44,13 +46,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
             />
           </div>
           <div className="input-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Your Password</label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={isLogin ? '••••••••' : 'At least 8 characters'}
+              placeholder={isLogin ? 'Enter your password' : 'Create a strong password'}
               required
             />
           </div>
@@ -62,16 +64,17 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         <div className="auth-footer">
           <p>
             {footerText}{' '}
-            <Link to={footerLink}>{footerLinkText}</Link>.
+            <Link to={footerLink} className="text-link">{footerLinkText}</Link>
           </p>
-          <p>
-            <Link to="/privacy">Privacy Policy</Link>
+          <p className="privacy-link">
+            By continuing, you agree to our{' '}
+            <Link to="/privacy" className="text-link">Privacy Policy</Link>.
           </p>
         </div>
         <div className="security-info">
           <p>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            Your data is protected with bank-level security.
+            Your information is always kept safe and secure.
           </p>
         </div>
       </Card>

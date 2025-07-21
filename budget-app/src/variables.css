@@ -1,10 +1,15 @@
 :root {
-  --primary-color: #007bff;
-  --secondary-color: #28a745;
-  --accent-color-alert: #dc3545;
-  --accent-color-action: #fd7e14;
-  --text-color: #333;
-  --background-color: #f8f9fa;
+  /* Font Families */
+  --font-family-primary: 'Roboto', 'Lato', sans-serif;
+  --font-family-secondary: 'Lato', 'Roboto', sans-serif;
+
+  /* New Color Palette */
+  --primary-color: #2C3E50; /* Midnight Blue */
+  --secondary-color: #3498DB; /* Peter River Blue */
+  --accent-color-alert: #E74C3C; /* Alizarin Crimson */
+  --accent-color-action: #E74C3C; /* Alizarin Crimson */
+  --text-color: #34495E; /* Wet Asphalt */
+  --background-color: #ECF0F1; /* Clouds */
   --primary-green: #2ECC71;
   --primary-green-dark: #27ae60;
   --primary-red: #E74C3C;

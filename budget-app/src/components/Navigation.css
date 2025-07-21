@@ -1,73 +1,86 @@
+/* General Navigation Styles */
 .navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  height: 60px;
   background-color: var(--card-background);
-  border-bottom: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
+  border-color: var(--border-color);
   z-index: 1000;
 }
 
-.nav-logo a {
+/* Desktop Navigation */
+.navigation.desktop {
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.navigation.desktop .nav-logo a {
   font-size: 1.5em;
   font-weight: bold;
   color: var(--primary-color);
   text-decoration: none;
 }
 
-.nav-links {
+.navigation.desktop .nav-links {
   display: flex;
-  gap: 20px;
-  height: 100%;
+  gap: 2rem;
 }
 
-.nav-links a {
+.navigation.desktop .nav-links a {
   text-decoration: none;
   color: var(--text-color);
   font-weight: 500;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
+  transition: color 0.2s;
 }
 
-.nav-links a.active,
-.nav-links a:hover {
+.navigation.desktop .nav-links a.active,
+.navigation.desktop .nav-links a:hover {
   color: var(--primary-color);
 }
 
-.nav-links a.active {
-    border-bottom-color: var(--primary-color);
-}
-
-.nav-user {
+.navigation.desktop .nav-user {
   display: flex;
   align-items: center;
+  gap: 1.5rem;
 }
 
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .navigation {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    height: 60px;
-    border-top: 1px solid var(--border-color);
-    border-bottom: none;
-  }
+/* Mobile Navigation */
+.navigation.mobile {
+  width: 100%;
+  height: 60px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
 
-  .nav-logo {
-    display: none;
-  }
+.navigation.mobile a {
+  color: var(--text-color);
+  transition: color 0.2s;
+}
 
-  .nav-links {
-    width: 100%;
-    justify-content: space-around;
+.navigation.mobile a.active,
+.navigation.mobile a:hover {
+  color: var(--primary-color);
+}
+
+/* Responsive Styles */
+.main-content {
+  padding-top: 60px; /* For desktop nav */
+  padding-bottom: 60px; /* For mobile nav */
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    padding-left: 0;
+    padding-bottom: 0;
   }
 }
