@@ -12,7 +12,7 @@
 .existing-budget-info {
   margin-top: 10px;
   padding: 10px;
-  background-color: #e3f2fd;
+  background-color: var(--background-color);
   border-radius: 4px;
   font-size: 0.9em;
 }
@@ -25,7 +25,7 @@
 }
 
 .no-budgets-message {
-  color: var(--neutral-gray-dark);
+  color: var(--text-color);
   font-style: italic;
 }
 
@@ -52,22 +52,22 @@
 }
 
 .budget-item .amount {
-  color: var(--primary-green);
+  color: var(--secondary-color);
   font-weight: bold;
 }
 
 .delete-button {
-  background-color: var(--primary-red) !important;
+  background-color: var(--accent-color-alert) !important;
   font-size: 0.8em !important;
   padding: 5px 10px !important;
 }
 
 .budget-comparison .summary {
   padding: 15px;
-  background-color: #f8f9fa;
+  background-color: var(--background-color);
   border-radius: 8px;
   margin-bottom: 20px;
-  border: 1px solid #e9ecef;
+  border: 1px solid var(--border-color);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 15px;
@@ -76,7 +76,7 @@
 
 .budget-comparison .summary .label {
   font-size: 0.9em;
-  color: #6c757d;
+  color: var(--text-color);
   margin-bottom: 5px;
 }
 
@@ -86,19 +86,19 @@
 }
 
 .budget-comparison .summary .total-budget .value {
-  color: #495057;
+  color: var(--primary-color);
 }
 
 .budget-comparison .summary .total-spent .value {
-  color: var(--primary-red);
+  color: var(--accent-color-alert);
 }
 
 .budget-comparison .summary .remaining .value.positive {
-  color: var(--primary-green);
+  color: var(--secondary-color);
 }
 
 .budget-comparison .summary .remaining .value.negative {
-  color: var(--primary-red);
+  color: var(--accent-color-alert);
 }
 
 .category-breakdown {
@@ -109,8 +109,8 @@
 .category-item {
   margin-bottom: 15px;
   padding: 15px;
-  background-color: #fff;
-  border: 1px solid #e9ecef;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
 }
 
@@ -128,7 +128,7 @@
 
 .category-item .header .details {
   font-size: 0.9em;
-  color: #666;
+  color: var(--text-color);
   margin-top: 2px;
 }
 
@@ -142,14 +142,14 @@
 }
 
 .category-item .header .status .no-budget {
-  color: #ffc107;
+  color: var(--accent-color-action);
   font-weight: bold;
 }
 
 .progress-bar {
   width: 100%;
   height: 8px;
-  background-color: #e9ecef;
+  background-color: var(--border-color);
   border-radius: 4px;
   overflow: hidden;
 }

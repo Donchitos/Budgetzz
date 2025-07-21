@@ -25,7 +25,7 @@
 
 .total-summary .label {
   font-size: 1.1em;
-  color: var(--neutral-gray-dark);
+  color: var(--text-color);
   margin-bottom: 5px;
 }
 
@@ -37,14 +37,14 @@
 
 .total-summary .count {
   font-size: 0.9em;
-  color: var(--neutral-gray-medium);
+  color: var(--text-color);
   margin-top: 5px;
 }
 
 .no-data-placeholder {
   text-align: center;
   padding: 40px 20px;
-  color: var(--neutral-gray-dark);
+  color: var(--text-color);
 }
 
 .no-data-placeholder .icon {

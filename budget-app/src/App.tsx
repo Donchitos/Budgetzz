@@ -9,7 +9,7 @@ import './App.css';
 
 const Login = lazy(() => import('./features/auth/Login'));
 const Register = lazy(() => import('./features/auth/Register'));
-const Dashboard = lazy(() => import('./features/dashboard/Dashboard'));
+const SettingsPage = lazy(() => import('./features/settings/SettingsPage'));
 const AlertsPage = lazy(() => import('./features/alerts/AlertsPage'));
 const BudgetManager = lazy(() => import('./features/budget/BudgetManager'));
 const GoalsManager = lazy(() => import('./features/goals/GoalsManager'));
@@ -40,9 +40,9 @@ function App() {
         <main className="main-content">
           <Suspense fallback={<div className="p-8"><Skeleton className="h-screen w-full" /></div>}>
             <Routes>
-              <Route path="/" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-              <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={user ? <Dashboard selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod} /> : <Navigate to="/" />} />
+              <Route path="/" element={!user ? <Login /> : <Navigate to="/transactions" />} />
+              <Route path="/register" element={!user ? <Register /> : <Navigate to="/transactions" />} />
+              <Route path="/settings" element={user ? <SettingsPage /> : <Navigate to="/" />} />
               <Route path="/transactions" element={user ? <TransactionPage selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod} /> : <Navigate to="/" />} />
               <Route path="/budgets" element={user ? <BudgetManager budgets={budgets} selectedPeriod={selectedPeriod} /> : <Navigate to="/" />} />
               <Route path="/goals" element={user ? <GoalsManager /> : <Navigate to="/" />} />

@@ -7,10 +7,9 @@ const Navigation: React.FC = () => {
   return (
     <nav className="navigation" aria-label="Main navigation">
       <div className="nav-logo">
-        <NavLink to="/dashboard">BudgetApp</NavLink>
+        <NavLink to="/transactions">BudgetApp</NavLink>
       </div>
       <div className="nav-links">
-        <NavLink to="/dashboard" end>Overview</NavLink>
         <NavLink to="/recurring">Recurring</NavLink>
         <NavLink to="/goals">Goals</NavLink>
         <NavLink to="/budgets">Budgets</NavLink>
@@ -19,7 +18,7 @@ const Navigation: React.FC = () => {
       </div>
       <div className="nav-user">
         <NotificationBell />
-        {/* User profile icon/menu can be added here */}
+        <NavLink to="/settings">Settings</NavLink>
       </div>
     </nav>
   );

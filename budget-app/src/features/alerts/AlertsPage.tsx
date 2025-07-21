@@ -55,7 +55,7 @@ const AlertsPage: React.FC = () => {
               <li key={rule.id}>
                 <span>{rule.alertType} - {rule.isEnabled ? 'Enabled' : 'Disabled'}</span>
                 <button onClick={() => handleEdit(rule)}>Edit</button>
-                <button onClick={() => handleDelete(rule.id)}>Delete</button>
+                <button className="btn-delete" onClick={() => handleDelete(rule.id)}>Delete</button>
               </li>
             ))}
           </ul>

@@ -4,8 +4,8 @@
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  background-color: var(--primary-green);
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--card-background);
   font-size: 1em;
   font-weight: bold;
   text-align: center;
@@ -15,26 +15,26 @@
 }
 
 .button:hover {
-  background-color: var(--primary-green-dark);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-image: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .button.destructive {
-  background-color: var(--primary-red);
+  background-color: var(--accent-color-alert);
 }
 
-.button.destructive:hover {
-  background-color: var(--primary-red-dark);
+.button.action {
+  background-color: var(--accent-color-action);
 }
 
 .button.button-secondary {
-  background-color: var(--neutral-gray-light);
-  color: var(--neutral-gray-dark);
+  background-color: var(--background-color);
+  color: var(--text-color);
   border: 1px solid var(--border-color);
 }
 
 .button.button-secondary:hover {
-  background-color: var(--neutral-gray-medium);
+  background-color: var(--border-color);
 }
 
 /* --- Forms --- */
@@ -47,7 +47,7 @@
 .form-group label {
   margin-bottom: 5px;
   font-weight: bold;
-  color: var(--neutral-gray-dark);
+  color: var(--text-color);
 }
 
 .form-group input,
@@ -77,4 +77,8 @@
 .page-header h1 {
   font-size: 1.8em;
   margin: 0;
+}
+.btn-delete {
+  background-color: var(--accent-color-alert);
+  color: white;
 }

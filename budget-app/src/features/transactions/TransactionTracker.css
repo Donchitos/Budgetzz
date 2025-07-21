@@ -13,7 +13,7 @@
 }
 
 .tracker-summary h2.income {
-  color: var(--primary-green);
+  color: var(--secondary-color);
 }
 
 .tracker-summary h2.expense {
@@ -22,5 +22,5 @@
 
 .tracker-summary .count {
   font-size: 0.9em;
-  color: var(--neutral-gray-dark);
+  color: var(--text-color);
 }

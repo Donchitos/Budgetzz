@@ -1,5 +1,5 @@
 .card {
-  background-color: var(--card-background);
+  background-image: linear-gradient(to top, var(--card-background), var(--background-color));
   border-radius: 8px;
   border: 1px solid var(--border-color);
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);

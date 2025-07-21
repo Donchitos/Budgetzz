@@ -40,7 +40,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   <Button
                     onClick={() => onDelete(transaction.id)}
                     variant="destructive"
-                    className="text-xs py-1 px-2"
+                    className="text-xs py-1 px-2 btn-delete"
                   >
                     Delete
                   </Button>

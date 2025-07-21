@@ -28,7 +28,7 @@ const BudgetList: React.FC<BudgetListProps> = ({ budgets, selectedPeriod }) => {
               }
             }}
             variant="destructive"
-            className="delete-button"
+            className="delete-button btn-delete"
             disabled={loading}
           >
             Delete

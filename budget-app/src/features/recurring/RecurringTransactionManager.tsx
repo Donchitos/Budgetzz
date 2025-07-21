@@ -326,7 +326,7 @@ function RecurringTransactionManager() {
                       
                       <Button
                         onClick={() => handleDelete(transaction.id, transaction.description)}
-                        className="text-xs px-3 py-1 bg-red-500 hover:bg-red-600 text-white"
+                        className="btn-delete text-xs px-3 py-1"
                       >
                         Delete
                       </Button>

@@ -27,7 +27,7 @@
 
 .transaction-item .description .date {
   font-size: 0.9em;
-  color: var(--neutral-gray-dark);
+  color: var(--text-color);
 }
 
 .transaction-item .details {
@@ -42,11 +42,11 @@
 }
 
 .transaction-item .amount.income {
-  color: var(--primary-green);
+  color: var(--secondary-color);
 }
 
 .transaction-item .amount.expense {
-  color: var(--primary-red);
+  color: var(--accent-color-alert);
 }
 
 .transaction-form {

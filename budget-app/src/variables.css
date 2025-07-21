@@ -1,4 +1,10 @@
 :root {
+  --primary-color: #007bff;
+  --secondary-color: #28a745;
+  --accent-color-alert: #dc3545;
+  --accent-color-action: #fd7e14;
+  --text-color: #333;
+  --background-color: #f8f9fa;
   --primary-green: #2ECC71;
   --primary-green-dark: #27ae60;
   --primary-red: #E74C3C;
@@ -6,8 +12,6 @@
   --neutral-gray-dark: #34495E;
   --neutral-gray-medium: #95A5A6;
   --neutral-gray-light: #ECF0F1;
-  --background-color: #F7F9F9;
-  --text-color: #2C3E50;
   --card-background: #FFFFFF;
   --border-color: #E0E0E0;
 }

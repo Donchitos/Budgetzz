@@ -26,7 +26,7 @@
 .auth-form label {
   margin-bottom: 5px;
   font-weight: bold;
-  color: var(--neutral-gray-dark);
+  color: var(--text-color);
 }
 
 .auth-footer {
@@ -36,7 +36,7 @@
 }
 
 .auth-footer a {
-  color: var(--primary-green);
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: bold;
 }
@@ -49,7 +49,7 @@
   margin-top: 30px;
   text-align: center;
   font-size: 0.8em;
-  color: var(--neutral-gray-medium);
+  color: var(--text-color);
 }
 
 .security-info svg {
