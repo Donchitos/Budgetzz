@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 
 const MobileNavigation: React.FC = () => {
   const { user } = useAuth();
-  const profilePic = user?.photoURL || "https://via.placeholder.com/40";
+  const profilePic = user?.photoURL || "https://placehold.co/40";
 
   return (
     <nav className="navigation mobile" aria-label="Main navigation">
