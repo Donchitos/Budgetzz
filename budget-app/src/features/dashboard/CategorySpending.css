@@ -1,0 +1,74 @@
+.category-spending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.category-spending-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.category-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+}
+
+.category-name {
+  font-weight: 500;
+}
+
+.category-amount {
+  text-align: right;
+}
+
+.amount-spent {
+  font-weight: 600;
+}
+
+.amount-budget {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.over-budget {
+  color: #ef4444;
+}
+
+.under-budget {
+  color: #22c55e;
+}
+
+.color-red {
+  background-color: #ef4444;
+}
+
+.color-yellow {
+  background-color: #f59e0b;
+}
+
+.color-green {
+  background-color: #22c55e;
+}
+
+.color-gray {
+  background-color: #6b7280;
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    color: #ef4444;
+}

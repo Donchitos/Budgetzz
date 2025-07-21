@@ -1,21 +1,19 @@
 import React from 'react';
 import './Dashboard.css';
 import Navigation from '../../components/Navigation';
-import DashboardMainContent from './DashboardMainContent';
-import UpcomingBills from './UpcomingBills';
-import SpendingTrends from './SpendingTrends';
-import CashFlowSankey from './CashFlowSankey';
+import DashboardHeader from './DashboardHeader';
+import DashboardColumns from './DashboardColumns';
+import { useAuth } from '../../hooks/useAuth';
 
 const Dashboard: React.FC = () => {
+  const { user } = useAuth();
   return (
     <div className="dashboard-layout">
       <Navigation />
-      <DashboardMainContent />
-      <div className="dashboard-widgets">
-        <UpcomingBills />
-        <SpendingTrends />
-        <CashFlowSankey />
-      </div>
+      <main className="main-content">
+        <DashboardHeader userName={user?.displayName || 'User'} />
+        <DashboardColumns />
+      </main>
     </div>
   );
 };

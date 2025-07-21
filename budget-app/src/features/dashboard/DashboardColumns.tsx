@@ -1,37 +1,46 @@
 import React from 'react';
 import BalanceOverview from './BalanceOverview';
 import FinancialInsights from './FinancialInsights';
-import FutureBalanceProjection from './FutureBalanceProjection';
 import QuickActions from './QuickActions';
 import GoalsSummaryWidget from '../goals/GoalsSummaryWidget';
-import type { RecurringTransaction } from '../../types';
+import RecentTransactions from './RecentTransactions';
+import CategorySpending from './CategorySpending';
+import UpcomingBills from './UpcomingBills';
+import { useDashboardData } from './useDashboardData';
 
-interface DashboardColumnsProps {
-  balance: number | null;
-  allRecurring: RecurringTransaction[];
-  loading: boolean;
-}
+const DashboardColumns: React.FC = () => {
+  const {
+    recentTransactions,
+    categorySpending,
+    totalBudget,
+    totalSpent,
+    lastMonthExpenses,
+  } = useDashboardData();
 
-const DashboardColumns: React.FC<DashboardColumnsProps> = ({
-  balance,
-  allRecurring,
-  loading,
-}) => {
   return (
     <div className="dashboard-columns">
-      <div className="dashboard-column-left">
+      {/* Left Column */}
+      <div className="dashboard-column">
         <BalanceOverview />
-        <FinancialInsights />
-        {!loading && balance !== null && (
-          <FutureBalanceProjection
-            currentBalance={balance}
-            recurringTransactions={allRecurring}
-          />
-        )}
-      </div>
-      <div className="dashboard-column-right">
         <QuickActions />
+        <UpcomingBills />
+      </div>
+
+      {/* Center Column */}
+      <div className="dashboard-column">
+        <RecentTransactions />
+        <CategorySpending />
+      </div>
+
+      {/* Right Column */}
+      <div className="dashboard-column">
         <GoalsSummaryWidget />
+        <FinancialInsights
+          currentExpenses={totalSpent}
+          lastMonthExpenses={lastMonthExpenses}
+          categorySpending={categorySpending}
+          savingsGoalProgress={0} // This should be calculated based on goals
+        />
       </div>
     </div>
   );

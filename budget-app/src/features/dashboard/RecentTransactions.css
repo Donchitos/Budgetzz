@@ -1,0 +1,96 @@
+.recent-transactions-card {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+  }
+  
+  .recent-transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .recent-transactions-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .transaction-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+  }
+  
+  .transaction-icon-container {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+  }
+  
+  .transaction-icon-container.income {
+    background-color: #d1fae5;
+    color: #065f46;
+  }
+  
+  .transaction-icon-container.expense {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+  
+  .transaction-details {
+    flex: 1;
+  }
+  
+  .transaction-description {
+    font-weight: 500;
+    color: #111827;
+  }
+  
+  .transaction-category {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  .transaction-amount {
+    font-weight: 500;
+    text-align: right;
+  }
+  
+  .transaction-amount.income {
+    color: #059669;
+  }
+  
+  .transaction-amount.expense {
+    color: #dc2626;
+  }
+  
+  .transaction-date {
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-align: right;
+  }
+  
+  .view-all-button {
+    width: 100%;
+    text-align: center;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+    font-weight: 500;
+    color: #2563eb;
+    background: none;
+    border-width: 0;
+    cursor: pointer;
+  }
+  
+  .view-all-button:hover {
+    color: #1d4ed8;
+  }

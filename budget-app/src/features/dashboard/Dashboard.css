@@ -44,21 +44,15 @@
   font-size: 1rem;
 }
 
-/* Two-column layout for dashboard content */
+/* Three-column layout for dashboard content */
 .dashboard-columns {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   align-items: start;
 }
 
-.dashboard-column-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.dashboard-column-right {
+.dashboard-column {
   display: flex;
   flex-direction: column;
   gap: 2rem;
