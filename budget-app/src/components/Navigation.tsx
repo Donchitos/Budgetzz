@@ -1,12 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, BarChart2, CircleDollarSign, Repeat, Target, Settings } from 'lucide-react';
+import { Home, BarChart2, CircleDollarSign, Repeat, Target } from 'lucide-react';
 import NotificationBell from '../features/alerts/NotificationBell';
 import useMediaQuery from '../hooks/useMediaQuery';
+import { useAuth } from '../hooks/useAuth';
 import './Navigation.css';
 
 const Navigation: React.FC = () => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
+  const { user } = useAuth();
+  const profilePic = user?.photoURL || "https://via.placeholder.com/40";
 
   if (isDesktop) {
     return (
@@ -24,7 +27,9 @@ const Navigation: React.FC = () => {
         </div>
         <div className="nav-user">
           <NotificationBell />
-          <NavLink to="/settings">Settings</NavLink>
+          <NavLink to="/settings" className="profile-link">
+            <img src={profilePic} alt="User Profile" className="profile-pic" />
+          </NavLink>
         </div>
       </nav>
     );
@@ -37,7 +42,9 @@ const Navigation: React.FC = () => {
       <NavLink to="/budgets"><CircleDollarSign /></NavLink>
       <NavLink to="/recurring"><Repeat /></NavLink>
       <NavLink to="/goals"><Target /></NavLink>
-      <NavLink to="/settings"><Settings /></NavLink>
+      <NavLink to="/settings">
+        <img src={profilePic} alt="User Profile" className="profile-pic" />
+      </NavLink>
     </nav>
   );
 };

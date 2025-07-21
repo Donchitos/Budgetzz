@@ -47,6 +47,11 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.navigation.desktop .nav-user a {
+  padding-right: 2rem;
 }
 
 /* Mobile Navigation */
@@ -83,4 +88,24 @@
     padding-left: 0;
     padding-bottom: 0;
   }
+}
+.profile-link {
+  display: flex;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.navigation.desktop .nav-user a.profile-link {
+  padding-right: 0;
+}
+
+.navigation.mobile .profile-pic {
+  width: 32px;
+  height: 32px;
 }
