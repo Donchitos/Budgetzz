@@ -6,31 +6,15 @@ export const useAccountBalance = () => {
   const { snapshot: incomeSnapshot, loading: incomeLoading, error: incomeError } = useFirestoreCollection('income');
   const { snapshot: expensesSnapshot, loading: expensesLoading, error: expensesError } = useFirestoreCollection('expenses');
 
-  const income = useMemo(() => {
-    if (!incomeSnapshot) return [];
-    return incomeSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    } as Transaction));
+  const totalIncome = useMemo(() => {
+    if (!incomeSnapshot) return 0;
+    return incomeSnapshot.docs.reduce((sum, doc) => sum + (doc.data() as Transaction).amount, 0);
   }, [incomeSnapshot]);
 
-  const expenses = useMemo(() => {
-    if (!expensesSnapshot) return [];
-    return expensesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    } as Transaction));
+  const totalExpenses = useMemo(() => {
+    if (!expensesSnapshot) return 0;
+    return expensesSnapshot.docs.reduce((sum, doc) => sum + (doc.data() as Transaction).amount, 0);
   }, [expensesSnapshot]);
-
-  const totalIncome = useMemo(
-    () => income.reduce((sum, item) => sum + item.amount, 0),
-    [income]
-  );
-
-  const totalExpenses = useMemo(
-    () => expenses.reduce((sum, item) => sum + item.amount, 0),
-    [expenses]
-  );
 
   const balance = useMemo(
     () => totalIncome - totalExpenses,

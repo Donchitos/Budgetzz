@@ -30,16 +30,16 @@ const Dashboard: React.FC = () => {
             <div className="dashboard-column-left">
               <BalanceOverview />
               <FinancialInsights />
-            </div>
-            <div className="dashboard-column-right">
-              <QuickActions />
-              <GoalsSummaryWidget />
               {(!balanceLoading && !recurringLoading) && (
                 <FutureBalanceProjection
                   currentBalance={balance}
                   recurringTransactions={allRecurring}
                 />
               )}
+            </div>
+            <div className="dashboard-column-right">
+              <QuickActions />
+              <GoalsSummaryWidget />
             </div>
           </div>
         </div>
