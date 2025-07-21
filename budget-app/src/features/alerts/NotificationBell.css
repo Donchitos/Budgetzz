@@ -1,19 +1,165 @@
+/* Modern NotificationBell Styles */
+
 .notification-bell {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bell-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--text-color);
   cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.bell-button:hover {
+  background-color: var(--neutral-gray-light);
+  color: var(--primary-color);
+}
+
+.bell-button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.bell-button:active {
+  transform: scale(0.95);
 }
 
 .bell-icon {
-  font-size: 24px;
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  transition: all 0.2s ease;
 }
 
-.badge {
+.notification-badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: 2px;
+  right: 2px;
   background-color: var(--accent-color-alert);
-  color: var(--card-background);
+  color: white;
   border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 12px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border: 2px solid var(--card-background);
+}
+
+.notification-badge:empty {
+  display: none;
+}
+
+/* Dropdown Styles */
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 320px;
+  max-width: 400px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  z-index: 1001;
+  overflow: hidden;
+  animation: fadeInDown 0.2s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Arrow pointing up to the bell */
+.notification-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+  border-right: none;
+  transform: rotate(45deg);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .notification-dropdown {
+    position: fixed;
+    top: auto;
+    bottom: 70px; /* Above mobile navigation */
+    left: 1rem;
+    right: 1rem;
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .notification-dropdown::before {
+    display: none; /* Hide arrow on mobile */
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .bell-button {
+    border: 1px solid var(--text-color);
+  }
+  
+  .notification-badge {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .bell-button,
+  .bell-icon,
+  .notification-dropdown {
+    transition: none;
+  }
+  
+  .notification-dropdown {
+    animation: none;
+  }
+}
+
+/* Focus visible for better accessibility */
+.bell-button:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Dark mode support (if you add it later) */
+@media (prefers-color-scheme: dark) {
+  .notification-dropdown {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
 }
