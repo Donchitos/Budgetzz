@@ -1,22 +1,15 @@
-import React from "react";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
-import { useTransactionForm } from "../../hooks/useTransactionForm";
-import "./Transaction.css";
+import React from 'react';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import { useTransactionForm } from '../../hooks/useTransactionForm';
+import './Transaction.css';
 
 interface TransactionFormProps {
-  onAddTransaction: (
-    description: string,
-    amount: number,
-    category?: string
-  ) => void;
-  transactionType: "Income" | "Expense";
+  transactionType: 'income' | 'expenses';
+  onFormSubmit: () => void;
 }
 
-const TransactionForm: React.FC<TransactionFormProps> = ({
-  onAddTransaction,
-  transactionType,
-}) => {
+const TransactionForm: React.FC<TransactionFormProps> = ({ transactionType, onFormSubmit }) => {
   const {
     description,
     setDescription,
@@ -25,7 +18,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     category,
     setCategory,
     handleSubmit,
-  } = useTransactionForm({ onAddTransaction, transactionType });
+  } = useTransactionForm({ transactionType, onFormSubmit });
 
   return (
     <form onSubmit={handleSubmit} className="transaction-form">
@@ -33,7 +26,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         type="text"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder={`${transactionType} description`}
+        placeholder={`${transactionType === 'income' ? 'Income' : 'Expense'} description`}
         required
       />
       <Input
@@ -43,7 +36,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         placeholder="Amount"
         required
       />
-      {transactionType === "Expense" && (
+      {transactionType === 'expenses' && (
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="Food">Food</option>
           <option value="Transport">Transport</option>
@@ -53,7 +46,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           <option value="Other">Other</option>
         </select>
       )}
-      <Button type="submit">Add {transactionType}</Button>
+      <Button type="submit">Add {transactionType === 'income' ? 'Income' : 'Expense'}</Button>
     </form>
   );
 };

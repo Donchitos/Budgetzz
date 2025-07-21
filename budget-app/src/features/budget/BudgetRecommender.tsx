@@ -10,6 +10,10 @@ interface Recommendation {
   recommendedAmount: number;
 }
 
+interface BudgetRecommendationsResponse {
+  recommendations: Recommendation[];
+}
+
 interface BudgetRecommenderProps {
   onBudgetsApplied: () => void;
 }
@@ -24,7 +28,8 @@ const BudgetRecommender: React.FC<BudgetRecommenderProps> = ({ onBudgetsApplied 
       try {
         const generateRecommendations = httpsCallable(functions, 'generateBudgetRecommendations');
         const result = await generateRecommendations({ months: 3 });
-        setRecommendations((result.data as any).recommendations);
+        const data = result.data as BudgetRecommendationsResponse;
+        setRecommendations(data.recommendations);
       } catch (err) {
         console.error("Error fetching budget recommendations:", err);
         setError("Could not fetch budget recommendations. Please try again later.");

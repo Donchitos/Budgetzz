@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { calculateBalanceProjection } from '../utils/projectionUtils';
 import type { RecurringTransaction } from '../types';
 
@@ -12,17 +12,17 @@ export const useBalanceProjection = (
   currentBalance: number,
   recurringTransactions: RecurringTransaction[],
   daysToProject: number
-) => {
-  const [projection, setProjection] = useState<ProjectionPoint[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
+): { projection: ProjectionPoint[]; loading: boolean } => {
+  const projection = useMemo(() => {
     if (currentBalance !== undefined && recurringTransactions.length > 0) {
-      const data = calculateBalanceProjection(currentBalance, recurringTransactions, daysToProject);
-      setProjection(data);
-      setLoading(false);
+      return calculateBalanceProjection(currentBalance, recurringTransactions, daysToProject);
     }
+    return [];
   }, [currentBalance, recurringTransactions, daysToProject]);
+
+  const loading = useMemo(() => {
+    return currentBalance === undefined || recurringTransactions.length === 0;
+  }, [currentBalance, recurringTransactions]);
 
   return { projection, loading };
 };

@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import type { ChartDataset } from 'chart.js';
 import { eachMonthOfInterval, format, startOfMonth, subYears } from 'date-fns';
 import type { Transaction, DateRange, ComparisonMode } from '../../types';
 import { Timestamp } from 'firebase/firestore';
@@ -76,7 +77,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ currentData, previousData, date
       return monthlyTotals;
     };
 
-    const datasets = [
+    const datasets: ChartDataset<'line', number[]>[] = [
       {
         label: 'Current Income',
         data: aggregateData(currentData.income, dateRange),
@@ -98,14 +99,14 @@ const TrendChart: React.FC<TrendChartProps> = ({ currentData, previousData, date
         borderColor: 'rgb(75, 192, 192)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderDash: [5, 5],
-      } as any);
+      });
       datasets.push({
         label: 'Previous Expenses',
         data: aggregateData(previousData.expenses, dateRange),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderDash: [5, 5],
-      } as any);
+      });
     }
 
     return {

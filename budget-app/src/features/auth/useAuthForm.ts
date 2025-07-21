@@ -3,6 +3,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
 import { auth } from '../../services/firebase';
 
 type AuthMode = 'login' | 'register';
@@ -24,8 +25,12 @@ export const useAuthForm = (mode: AuthMode) => {
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof FirebaseError) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred.');
+      }
       console.error(`Error during ${mode}:`, err);
     } finally {
       setLoading(false);

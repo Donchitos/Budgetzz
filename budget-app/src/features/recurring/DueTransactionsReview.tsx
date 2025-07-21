@@ -14,6 +14,7 @@ import {
   calculateMissedOccurrences
 } from '../../types/recurringUtils';
 import type { RecurringTransaction } from '../../types';
+import { Timestamp } from 'firebase/firestore';
 
 function DueTransactionsReview() {
   const { snapshot: recurringSnapshot, loading, error } = useFirestoreCollection('recurring-transactions');
@@ -124,8 +125,8 @@ function DueTransactionsReview() {
     }
   };
 
-  const formatDueDate = (dueDate: any) => {
-    const date = dueDate?.toDate ? dueDate.toDate() : new Date(dueDate);
+  const formatDueDate = (dueDate: Date | Timestamp) => {
+    const date = dueDate instanceof Timestamp ? dueDate.toDate() : new Date(dueDate);
     const today = new Date();
     
     const diffTime = today.getTime() - date.getTime();

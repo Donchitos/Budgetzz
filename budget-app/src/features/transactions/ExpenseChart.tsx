@@ -1,5 +1,6 @@
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import type { TooltipItem } from "chart.js";
 import type { Transaction } from "../../types";
 import Card from "../../components/Card";
 import "./ExpenseChart.css";
@@ -55,7 +56,7 @@ function ExpenseChart({ expenses, periodLabel }: ExpenseChartProps) {
       },
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function (context: TooltipItem<'pie'>) {
             const value = context.parsed;
             const percentage = ((value / totalExpenses) * 100).toFixed(1);
             return `${context.label}: $${value.toFixed(2)} (${percentage}%)`;

@@ -24,6 +24,8 @@ export interface FinancialGoal {
   isCompleted: boolean;
   createdAt: string; // ISO 8601 date string
   updatedAt: string; // ISO 8601 date string
+  lastNotifiedMilestone?: number;
+  deadlineNotified?: boolean;
 }
 
 export interface GoalContribution {

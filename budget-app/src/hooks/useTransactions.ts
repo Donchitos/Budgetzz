@@ -1,45 +1,23 @@
-import { collection, query, where, deleteDoc, doc, addDoc, serverTimestamp } from "firebase/firestore";
-import { db, auth } from "../services/firebase";
-import { useMemo } from "react";
-import { isDateInRange, getMonthRange } from "../utils/dateUtils";
-import type { Transaction } from "../types";
-import useFirestoreCollection from "./useFirestoreCollection";
+import { useMemo } from 'react';
+import { collection, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { db, auth } from '../services/firebase';
+import { useData } from './useData';
+import { isDateInRange, getMonthRange } from '../utils/dateUtils';
+import type { Transaction } from '../types';
 
 export const useTransactions = (selectedPeriod: Date) => {
-  const { snapshot: incomeSnapshot, loading: incomeLoading, error: incomeError } = useFirestoreCollection("income");
-  const { snapshot: expensesSnapshot, loading: expensesLoading, error: expensesError } = useFirestoreCollection("expenses");
-
-  const income = useMemo(() => {
-    if (!incomeSnapshot) return [];
-    return incomeSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-  }, [incomeSnapshot]);
-
-  const expenses = useMemo(() => {
-    if (!expensesSnapshot) return [];
-    return expensesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-  }, [expensesSnapshot]);
+  const { data: income, loading: incomeLoading, error: incomeError } = useData<Transaction>('income');
+  const { data: expenses, loading: expensesLoading, error: expensesError } = useData<Transaction>('expenses');
 
   const dateRange = getMonthRange(selectedPeriod);
 
   const filteredIncome = useMemo(
-    () =>
-      (income as Transaction[]).filter((item) =>
-        isDateInRange(item.createdAt, dateRange)
-      ),
+    () => income.filter((item) => isDateInRange(item.createdAt, dateRange)),
     [income, dateRange]
   );
 
   const filteredExpenses = useMemo(
-    () =>
-      (expenses as Transaction[]).filter((item) =>
-        isDateInRange(item.createdAt, dateRange)
-      ),
+    () => expenses.filter((item) => isDateInRange(item.createdAt, dateRange)),
     [expenses, dateRange]
   );
 
@@ -53,14 +31,16 @@ export const useTransactions = (selectedPeriod: Date) => {
     [filteredExpenses]
   );
 
+  const balance = useMemo(() => totalIncome - totalExpenses, [totalIncome, totalExpenses]);
+
   const addTransaction = async (
-    collectionName: "income" | "expenses",
+    collectionName: 'income' | 'expenses',
     description: string,
     amount: number,
     category?: string
   ) => {
     if (!auth.currentUser) {
-      throw new Error("You must be logged in to add a transaction.");
+      throw new Error('You must be logged in to add a transaction.');
     }
     await addDoc(collection(db, collectionName), {
       userId: auth.currentUser.uid,
@@ -71,23 +51,11 @@ export const useTransactions = (selectedPeriod: Date) => {
     });
   };
 
-  const deleteTransaction = async (id: string) => {
+  const deleteTransaction = async (collectionName: 'income' | 'expenses', id: string) => {
     try {
-      const incomeDoc = (income as Transaction[]).find(t => t.id === id);
-      if (incomeDoc) {
-        await deleteDoc(doc(db, "income", id));
-        return;
-      }
-
-      const expenseDoc = (expenses as Transaction[]).find(t => t.id === id);
-      if (expenseDoc) {
-        await deleteDoc(doc(db, "expenses", id));
-        return;
-      }
-
-      console.warn(`Transaction with id ${id} not found in income or expenses.`);
+      await deleteDoc(doc(db, collectionName, id));
     } catch (error) {
-      console.error("Error deleting transaction: ", error);
+      console.error('Error deleting transaction: ', error);
     }
   };
 
@@ -96,6 +64,7 @@ export const useTransactions = (selectedPeriod: Date) => {
     expenses: filteredExpenses,
     totalIncome,
     totalExpenses,
+    balance,
     loading: incomeLoading || expensesLoading,
     error: incomeError || expensesError,
     addTransaction,

@@ -1,36 +1,33 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useTransactions } from './useTransactions';
 
 interface UseTransactionFormProps {
-  onAddTransaction: (
-    description: string,
-    amount: number,
-    category?: string
-  ) => void;
-  transactionType: "Income" | "Expense";
+  transactionType: 'income' | 'expenses';
+  onFormSubmit: () => void;
 }
 
-export const useTransactionForm = ({
-  onAddTransaction,
-  transactionType,
-}: UseTransactionFormProps) => {
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("Food");
+export const useTransactionForm = ({ transactionType, onFormSubmit }: UseTransactionFormProps) => {
+  const { addTransaction } = useTransactions(new Date());
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('Food');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      alert("Please enter a valid amount greater than 0.");
+      alert('Please enter a valid amount greater than 0.');
       return;
     }
-    onAddTransaction(
+    await addTransaction(
+      transactionType,
       description,
       parsedAmount,
-      transactionType === "Expense" ? category : undefined
+      transactionType === 'expenses' ? category : undefined
     );
-    setDescription("");
-    setAmount("");
+    setDescription('');
+    setAmount('');
+    onFormSubmit();
   };
 
   return {

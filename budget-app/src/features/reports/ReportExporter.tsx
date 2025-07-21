@@ -1,6 +1,7 @@
 // src/features/reports/ReportExporter.tsx
 import React from 'react';
 import type { Transaction } from '../../types';
+import type { ReportTransaction } from '../../types/reports';
 import { format } from 'date-fns';
 
 interface ReportExporterProps {
@@ -14,9 +15,9 @@ const ReportExporter: React.FC<ReportExporterProps> = ({ income, expenses, filen
   const convertToCSV = (incomeData: Transaction[], expensesData: Transaction[]): string => {
     const headers = ['Date', 'Description', 'Category', 'Amount', 'Type'];
     
-    const allTransactions = [
-      ...incomeData.map(t => ({ ...t, type: 'Income' })),
-      ...expensesData.map(t => ({ ...t, type: 'Expense' }))
+    const allTransactions: ReportTransaction[] = [
+      ...incomeData.map(t => ({ ...t, type: 'Income' as const })),
+      ...expensesData.map(t => ({ ...t, type: 'Expense' as const }))
     ];
 
     // Sort by date, most recent first
@@ -33,7 +34,7 @@ const ReportExporter: React.FC<ReportExporterProps> = ({ income, expenses, filen
         `"${t.description.replace(/"/g, '""')}"`, // Escape double quotes
         t.category || '',
         t.amount,
-        (t as any).type
+        t.type
       ].join(',');
     });
 

@@ -7,7 +7,8 @@ import Card from '../../components/Card';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { calculateNextDueDate } from '../../types/recurringUtils';
-import type { RecurringTransaction } from '../../types';
+import type { RecurringTransaction, NewRecurringTransaction, FrequencyType } from '../../types';
+import { Timestamp } from 'firebase/firestore';
 import Skeleton from '../../components/Skeleton';
 import './RecurringTransactionManager.css';
 
@@ -28,7 +29,7 @@ function RecurringTransactionManager() {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('Housing');
-  const [frequency, setFrequency] = useState('monthly');
+  const [frequency, setFrequency] = useState<FrequencyType>('monthly');
   const [startDate, setStartDate] = useState(() => {
     const today = new Date();
     return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
@@ -81,14 +82,14 @@ function RecurringTransactionManager() {
       // Calculate next due date with error handling
       let nextDueDate;
       try {
-        nextDueDate = calculateNextDueDate(startDateObj, frequency as any);
+        nextDueDate = calculateNextDueDate(startDateObj, frequency as FrequencyType);
       } catch (err) {
         console.error("Error calculating next due date:", err);
         alert("Error calculating next due date. Please check your start date and frequency.");
         return;
       }
 
-      const recurringData: any = {
+      const recurringData: NewRecurringTransaction = {
         type,
         description: description.trim(),
         amount: parsedAmount,
@@ -147,8 +148,8 @@ function RecurringTransactionManager() {
     }
   };
 
-  const formatNextDue = (nextDueDate: any) => {
-    const date = nextDueDate?.toDate ? nextDueDate.toDate() : new Date(nextDueDate);
+  const formatNextDue = (nextDueDate: Date | Timestamp) => {
+    const date = nextDueDate instanceof Timestamp ? nextDueDate.toDate() : new Date(nextDueDate);
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -175,7 +176,7 @@ function RecurringTransactionManager() {
             <label>Frequency</label>
             <select
               value={frequency}
-              onChange={(e) => setFrequency(e.target.value)}
+              onChange={(e) => setFrequency(e.target.value as FrequencyType)}
             >
               {frequencies.map(freq => (
                 <option key={freq.value} value={freq.value}>{freq.label}</option>

@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './services/firebase';
 import Skeleton from './components/Skeleton';
@@ -35,28 +35,26 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className={`app-container ${user ? 'authenticated' : ''}`}>
-        {user && <Navigation />}
-        <main className="main-content">
-          <Suspense fallback={<div className="p-8"><Skeleton className="h-screen w-full" /></div>}>
-            <Routes>
-              <Route path="/" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
-              <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-              <Route path="/settings" element={user ? <SettingsPage /> : <Navigate to="/" />} />
-              <Route path="/transactions" element={user ? <TransactionPage selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod} /> : <Navigate to="/" />} />
-              <Route path="/budgets" element={user ? <BudgetManager budgets={budgets} selectedPeriod={selectedPeriod} /> : <Navigate to="/" />} />
-              <Route path="/goals" element={user ? <GoalsManager /> : <Navigate to="/" />} />
-              <Route path="/reports" element={user ? <ReportsPage /> : <Navigate to="/" />} />
-              <Route path="/alerts" element={user ? <AlertsPage /> : <Navigate to="/" />} />
-              <Route path="/recurring" element={user ? <RecurringTransactionManager /> : <Navigate to="/" />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-            </Routes>
-          </Suspense>
-        </main>
-      </div>
-    </Router>
+    <div className={`app-container ${user ? 'authenticated' : ''}`}>
+      {user && <Navigation />}
+      <main className="main-content">
+        <Suspense fallback={<div className="p-8"><Skeleton className="h-screen w-full" /></div>}>
+          <Routes>
+            <Route path="/" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+            <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/" />} />
+            <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
+            <Route path="/settings" element={user ? <SettingsPage /> : <Navigate to="/" />} />
+            <Route path="/transactions" element={user ? <TransactionPage selectedPeriod={selectedPeriod} setSelectedPeriod={setSelectedPeriod} /> : <Navigate to="/" />} />
+            <Route path="/budgets" element={user ? <BudgetManager budgets={budgets} selectedPeriod={selectedPeriod} /> : <Navigate to="/" />} />
+            <Route path="/goals" element={user ? <GoalsManager /> : <Navigate to="/" />} />
+            <Route path="/reports" element={user ? <ReportsPage /> : <Navigate to="/" />} />
+            <Route path="/alerts" element={user ? <AlertsPage /> : <Navigate to="/" />} />
+            <Route path="/recurring" element={user ? <RecurringTransactionManager /> : <Navigate to="/" />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+          </Routes>
+        </Suspense>
+      </main>
+    </div>
   );
 }
 

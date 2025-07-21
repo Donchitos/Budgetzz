@@ -1,14 +1,14 @@
-import React from "react";
-import TransactionForm from "./TransactionForm";
-import Card from "../../components/Card";
-import type { Transaction } from "../../types";
-import TransactionList from "../../components/TransactionList";
-import { useTransactions } from "../../hooks/useTransactions";
-import "./TransactionTracker.css";
+import React, { useState } from 'react';
+import TransactionForm from './TransactionForm';
+import Card from '../../components/Card';
+import type { Transaction } from '../../types';
+import TransactionList from '../../components/TransactionList';
+import { useTransactions } from '../../hooks/useTransactions';
+import './TransactionTracker.css';
 
 interface TransactionTrackerProps {
   transactions: Transaction[];
-  transactionType: "Income" | "Expense";
+  transactionType: 'income' | 'expenses';
   title: string;
 }
 
@@ -17,27 +17,10 @@ function TransactionTracker({
   transactionType,
   title,
 }: TransactionTrackerProps) {
-  const { addTransaction, deleteTransaction } = useTransactions(new Date());
+  const { deleteTransaction } = useTransactions(new Date());
+  const [showForm, setShowForm] = useState(false);
 
   const total = transactions.reduce((sum, item) => sum + item.amount, 0);
-
-  const handleAddTransaction = async (
-    description: string,
-    amount: number,
-    category?: string
-  ) => {
-    try {
-      await addTransaction(
-        transactionType.toLowerCase() as "income" | "expenses",
-        description,
-        amount,
-        category
-      );
-    } catch (err) {
-      console.error(`Error adding ${transactionType}: `, err);
-      alert(`Error adding ${transactionType}. Please try again.`);
-    }
-  };
 
   const handleDeleteTransaction = async (id: string) => {
     if (
@@ -46,7 +29,7 @@ function TransactionTracker({
       )
     ) {
       try {
-        await deleteTransaction(id);
+        await deleteTransaction(transactionType, id);
       } catch (err) {
         console.error(`Error deleting ${transactionType}: `, err);
         alert(`Error deleting ${transactionType}. Please try again.`);
@@ -56,10 +39,17 @@ function TransactionTracker({
 
   return (
     <Card title={title}>
-      <TransactionForm
-        onAddTransaction={handleAddTransaction}
-        transactionType={transactionType}
-      />
+      <div className="tracker-header">
+        <button onClick={() => setShowForm(!showForm)}>
+          {showForm ? 'Cancel' : `Add ${transactionType === 'income' ? 'Income' : 'Expense'}`}
+        </button>
+      </div>
+      {showForm && (
+        <TransactionForm
+          transactionType={transactionType}
+          onFormSubmit={() => setShowForm(false)}
+        />
+      )}
       <hr />
       <div className="tracker-summary">
         <h2 className={transactionType.toLowerCase()}>
@@ -67,7 +57,7 @@ function TransactionTracker({
         </h2>
         <div className="count">
           {transactions.length} transaction
-          {transactions.length !== 1 ? "s" : ""}
+          {transactions.length !== 1 ? 's' : ''}
         </div>
       </div>
       <TransactionList

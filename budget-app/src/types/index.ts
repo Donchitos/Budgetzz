@@ -45,6 +45,21 @@ export interface RecurringTransaction {
   updatedAt: Timestamp | Date;
 }
 
+export interface NewRecurringTransaction {
+  type: 'income' | 'expense';
+  description: string;
+  amount: number;
+  category?: string;
+  frequency: FrequencyType;
+  startDate: Date;
+  endDate: Date | null;
+  isActive: boolean;
+  nextDueDate: Date;
+  userId: string;
+  createdAt: any; // Special type for server-generated timestamps
+  updatedAt: any;
+}
+
 export interface PendingTransaction {
   id: string;
   recurringId: string;
