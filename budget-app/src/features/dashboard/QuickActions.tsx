@@ -1,12 +1,12 @@
 import React from 'react';
-import Card from '../../components/Card';
+import CollapsibleMenu from '../../components/CollapsibleMenu';
 import Button from '../../components/Button';
 import { DollarSign, ShoppingCart, CreditCard } from 'lucide-react';
 import './QuickActions.css';
 
 const QuickActions: React.FC = () => {
   return (
-    <Card title="Quick Actions">
+    <CollapsibleMenu title="Quick Actions">
       <div className="quick-actions-buttons">
         <Button onClick={() => {}}>
           <DollarSign size={18} />
@@ -21,7 +21,7 @@ const QuickActions: React.FC = () => {
           <span>Add Transfer</span>
         </Button>
       </div>
-    </Card>
+    </CollapsibleMenu>
   );
 };
 

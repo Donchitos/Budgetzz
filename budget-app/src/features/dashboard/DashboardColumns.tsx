@@ -18,15 +18,17 @@ const DashboardColumns: React.FC = () => {
   } = useDashboardData();
 
   return (
-    <div className="dashboard-columns">
-      {/* Left Column */}
-      <div className="dashboard-column">
-        <BalanceOverview />
+    <>
+      <div className="quick-actions-container">
         <QuickActions />
-        <UpcomingBills />
       </div>
-
-      {/* Center Column */}
+      <div className="dashboard-columns">
+        {/* Left Column */}
+        <div className="dashboard-column">
+          <BalanceOverview />
+          <UpcomingBills />
+        </div>
+        {/* Center Column */}
       <div className="dashboard-column">
         <RecentTransactions />
         <CategorySpending />
@@ -43,6 +45,7 @@ const DashboardColumns: React.FC = () => {
         />
       </div>
     </div>
+    </>
   );
 };
 
