@@ -1,8 +1,9 @@
 .recurring-manager-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 400px 1fr;
   gap: 2rem;
   padding: 2rem;
+  align-items: start;
 }
 
 .form-card, .list-card {
@@ -16,15 +17,39 @@
 }
 
 .transaction-item {
-  border-bottom: 1px solid var(--border-color);
-  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.transaction-item:last-child {
-  border-bottom: none;
+.transaction-item:hover {
+  background-color: #f9f9f9;
+}
+
+.transaction-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.transaction-icon.income {
+  background-color: var(--primary-green);
+}
+
+.transaction-icon.expense {
+  background-color: var(--primary-red);
 }
 
 .transaction-details {
+  flex-grow: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
