@@ -17,6 +17,7 @@ import { generateBudgetId, getCurrentMonth } from "../utils/dateUtils";
 import { calculateNextDueDate } from "../types/recurringUtils";
 import type { RecurringTransaction, FrequencyType } from "../types";
 import type { AlertRule, UserNotificationPreference } from "../types/alerts";
+import type { FinancialGoal } from "../types/goals";
 
 // Transactions
 export const addTransaction = async (
@@ -302,4 +303,45 @@ export const setUserNotificationPreferences = async (preferences: Partial<UserNo
     userId: auth.currentUser.uid,
     updatedAt: serverTimestamp(),
   }, { merge: true });
+};
+
+// Goals
+export const addGoal = async (goal: Omit<FinancialGoal, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'currentAmount' | 'isCompleted'>) => {
+  if (!auth.currentUser) throw new Error("User not authenticated");
+  const collectionRef = collection(db, "financial-goals");
+  await addDoc(collectionRef, {
+    ...goal,
+    userId: auth.currentUser.uid,
+    currentAmount: 0,
+    isCompleted: false,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const updateGoal = async (id: string, updates: Partial<FinancialGoal>) => {
+  const docRef = doc(db, "financial-goals", id);
+  await updateDoc(docRef, {
+    ...updates,
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const deleteGoal = async (id: string) => {
+  const docRef = doc(db, "financial-goals", id);
+  await deleteDoc(docRef);
+};
+
+export const addFundsToGoal = async (id: string, amount: number) => {
+  const docRef = doc(db, "financial-goals", id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const goal = docSnap.data() as FinancialGoal;
+    const newCurrentAmount = goal.currentAmount + amount;
+    await updateDoc(docRef, {
+      currentAmount: newCurrentAmount,
+      isCompleted: newCurrentAmount >= goal.targetAmount,
+      updatedAt: serverTimestamp(),
+    });
+  }
 };

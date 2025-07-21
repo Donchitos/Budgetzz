@@ -1,0 +1,38 @@
+.goal-card {
+  margin-bottom: 1rem;
+}
+
+.goal-progress {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progress-text {
+  margin-left: 0.5rem;
+  font-weight: bold;
+}
+
+.goal-amount {
+  margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.goal-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.progress-bar-container {
+  width: 100%;
+  background-color: var(--border-color);
+  border-radius: 4px;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  transition: width 0.5s ease-in-out;
+}

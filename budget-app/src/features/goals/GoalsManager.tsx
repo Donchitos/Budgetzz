@@ -1,43 +1,77 @@
 import React, { useState } from 'react';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
 import type { FinancialGoal } from '../../types/goals';
-import { collection, addDoc } from 'firebase/firestore';
-import { db, auth } from '../../services/firebase';
+import { addGoal, addFundsToGoal, updateGoal, deleteGoal } from '../../services/api';
 import Skeleton from '../../components/Skeleton';
+import Button from '../../components/Button';
+import GoalCard from './GoalCard';
+import AddFundsForm from './AddFundsForm';
+import GoalForm from './GoalForm';
+import Modal from '../../components/Modal';
+import './GoalCard.css';
+import './AddFundsForm.css';
+import './GoalForm.css';
 
 const GoalsManager: React.FC = () => {
   const { snapshot, loading, error } = useFirestoreCollection('financial-goals');
-  const [goalName, setGoalName] = useState('');
-  const [targetAmount, setTargetAmount] = useState('');
-  const [deadline, setDeadline] = useState('');
+  const [selectedGoal, setSelectedGoal] = useState<FinancialGoal | null>(null);
+  const [isAddFundsModalOpen, setAddFundsModalOpen] = useState(false);
+  const [isGoalFormModalOpen, setGoalFormModalOpen] = useState(false);
 
   const goals: FinancialGoal[] = snapshot ? snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as FinancialGoal)) : [];
 
-  const handleCreateGoal = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!auth.currentUser) {
-      alert('You must be logged in to create a goal.');
-      return;
-    }
+  const handleCreateOrUpdateGoal = async (goalData: Partial<FinancialGoal>) => {
     try {
-      await addDoc(collection(db, 'financial-goals'), {
-        userId: auth.currentUser.uid,
-        title: goalName,
-        targetAmount: parseFloat(targetAmount),
-        currentAmount: 0,
-        targetDate: deadline,
-        priority: 'medium',
-        category: 'other',
-        isCompleted: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
-      setGoalName('');
-      setTargetAmount('');
-      setDeadline('');
+      if (selectedGoal) {
+        await updateGoal(selectedGoal.id, goalData);
+      } else {
+        await addGoal(goalData as any);
+      }
+      closeGoalFormModal();
     } catch (err) {
-      console.error('Error creating goal:', err);
+      console.error('Error saving goal:', err);
     }
+  };
+
+  const handleAddFunds = async (amount: number) => {
+    if (selectedGoal) {
+      try {
+        await addFundsToGoal(selectedGoal.id, amount);
+        closeAddFundsModal();
+      } catch (err) {
+        console.error('Error adding funds:', err);
+      }
+    }
+  };
+
+  const handleDeleteGoal = async (goalId: string) => {
+    if (window.confirm('Are you sure you want to delete this goal?')) {
+      try {
+        await deleteGoal(goalId);
+      } catch (err) {
+        console.error('Error deleting goal:', err);
+      }
+    }
+  };
+
+  const openAddFundsModal = (goal: FinancialGoal) => {
+    setSelectedGoal(goal);
+    setAddFundsModalOpen(true);
+  };
+
+  const closeAddFundsModal = () => {
+    setAddFundsModalOpen(false);
+    setSelectedGoal(null);
+  };
+
+  const openGoalFormModal = (goal?: FinancialGoal) => {
+    setSelectedGoal(goal || null);
+    setGoalFormModalOpen(true);
+  };
+
+  const closeGoalFormModal = () => {
+    setGoalFormModalOpen(false);
+    setSelectedGoal(null);
   };
 
   if (loading) {
@@ -62,40 +96,44 @@ const GoalsManager: React.FC = () => {
   return (
     <div>
       <h2>Goals Manager</h2>
-      <form onSubmit={handleCreateGoal}>
-        <input
-          type="text"
-          value={goalName}
-          onChange={(e) => setGoalName(e.target.value)}
-          placeholder="Goal Name"
-          required
-        />
-        <input
-          type="number"
-          value={targetAmount}
-          onChange={(e) => setTargetAmount(e.target.value)}
-          placeholder="Target Amount"
-          required
-        />
-        <input
-          type="date"
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
-          required
-        />
-        <button type="submit">Add Goal</button>
-      </form>
+      <div className="page-header">
+        <Button onClick={() => openGoalFormModal()}>Create Goal</Button>
+      </div>
       <div>
         <h3>Your Goals</h3>
         {goals.map((goal: FinancialGoal) => (
-          <div key={goal.id}>
-            <p>{goal.title}</p>
-            <p>Target: ${goal.targetAmount}</p>
-            <p>Saved: ${goal.currentAmount}</p>
-            <p>Deadline: {goal.targetDate}</p>
-          </div>
+          <GoalCard
+            key={goal.id}
+            goal={goal}
+            onAddFunds={() => openAddFundsModal(goal)}
+            onEdit={() => openGoalFormModal(goal)}
+            onDelete={handleDeleteGoal}
+          />
         ))}
       </div>
+      <Modal
+        isOpen={isAddFundsModalOpen}
+        onClose={closeAddFundsModal}
+        title={selectedGoal ? `Add Funds to ${selectedGoal.title}` : 'Add Funds'}
+      >
+        {selectedGoal && (
+          <AddFundsForm
+            onSubmit={handleAddFunds}
+            onCancel={closeAddFundsModal}
+          />
+        )}
+      </Modal>
+      <Modal
+        isOpen={isGoalFormModalOpen}
+        onClose={closeGoalFormModal}
+        title={selectedGoal ? 'Edit Goal' : 'Create Goal'}
+      >
+        <GoalForm
+          goal={selectedGoal || undefined}
+          onSubmit={handleCreateOrUpdateGoal}
+          onCancel={closeGoalFormModal}
+        />
+      </Modal>
     </div>
   );
 };
