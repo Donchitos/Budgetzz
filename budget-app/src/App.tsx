@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './services/firebase';
 import Skeleton from './components/Skeleton';
@@ -20,6 +20,7 @@ const RecurringTransactionManager = lazy(() => import('./features/recurring/Recu
 const Dashboard = lazy(() => import('./features/dashboard/Dashboard'));
 
 function App() {
+  const location = useLocation();
   const [user, loading] = useAuthState(auth);
   const [selectedPeriod, setSelectedPeriod] = useState(new Date());
   const { budgets } = useBudget(selectedPeriod);

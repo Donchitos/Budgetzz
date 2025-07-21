@@ -37,8 +37,8 @@ exports.generateBudgetRecommendations = exports.onNotificationCreated = exports.
 const admin = __importStar(require("firebase-admin"));
 const functions = __importStar(require("firebase-functions"));
 admin.initializeApp();
-// A simple "hello world" function to verify the setup
-exports.helloWorld = functions.https.onRequest((request, response) => {
+// A simple "hello world" function to verify the setup.
+exports.helloWorld = functions.https.onRequest(async (request, response) => {
     functions.logger.info("Hello logs!", { structuredData: true });
     response.send("Hello from Firebase!");
 });
@@ -48,7 +48,7 @@ Object.defineProperty(exports, "generateBudgetRecommendations", { enumerable: tr
 // Export the alert engine
 var alertEngine_1 = require("./alertEngine");
 Object.defineProperty(exports, "runAlertEngine", { enumerable: true, get: function () { return alertEngine_1.runAlertEngine; } });
-// Firestore trigger for new notifications
+// Firestore trigger to handle new notifications.
 exports.onNotificationCreated = functions.firestore
     .document("notifications/{notificationId}")
     .onCreate(delivery_1.handleNotificationDelivery);
