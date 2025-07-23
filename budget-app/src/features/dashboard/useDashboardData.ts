@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import useFirestoreCollection from '../../hooks/useFirestoreCollection';
-import type { RecurringTransaction, Transaction, Budget } from '../../types';
+import type { RecurringTransaction, Transaction, Budget, FinancialGoal } from '../../types';
 import { Timestamp } from 'firebase/firestore';
 
 interface DashboardTransaction {
@@ -32,6 +32,7 @@ export const useDashboardData = () => {
   const [categorySpending, setCategorySpending] = useState<CategoryData[]>([]);
   const [totalBudget, setTotalBudget] = useState<number>(0);
   const [totalSpent, setTotalSpent] = useState<number>(0);
+  const [savingsGoalProgress, setSavingsGoalProgress] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   // Existing hooks
@@ -39,6 +40,7 @@ export const useDashboardData = () => {
   const { snapshot: incomeSnapshot } = useFirestoreCollection('income');
   const { snapshot: expensesSnapshot } = useFirestoreCollection('expenses');
   const { snapshot: budgetsSnapshot } = useFirestoreCollection('budgets');
+  const { snapshot: goalsSnapshot } = useFirestoreCollection('financial-goals');
 
   const allRecurring = recurringSnapshot?.docs.map(doc => ({
     id: doc.id,
@@ -46,7 +48,7 @@ export const useDashboardData = () => {
   } as RecurringTransaction)) || [];
 
   useEffect(() => {
-    if (!user || !incomeSnapshot || !expensesSnapshot) {
+    if (!user || !incomeSnapshot || !expensesSnapshot || !goalsSnapshot) {
       setLoading(false);
       return;
     }
@@ -164,6 +166,15 @@ export const useDashboardData = () => {
       const totalCategoryBudget = categories.reduce((sum, cat) => sum + cat.budget, 0);
       const totalCategorySpent = categories.reduce((sum, cat) => sum + cat.amount, 0);
 
+      // Calculate savings goal progress
+      const goals = goalsSnapshot.docs
+        .map(doc => doc.data() as FinancialGoal)
+        .filter(goal => goal.userId === user.uid);
+      
+      const totalGoalTarget = goals.reduce((sum, goal) => sum + (goal.targetAmount || 0), 0);
+      const totalGoalCurrent = goals.reduce((sum, goal) => sum + (goal.currentAmount || 0), 0);
+      const savingsProgress = totalGoalTarget > 0 ? (totalGoalCurrent / totalGoalTarget) * 100 : 0;
+
       // Update state
       setBalance(currentBalance);
       setMonthlyIncome(currentMonthIncome);
@@ -174,13 +185,14 @@ export const useDashboardData = () => {
       setCategorySpending(categories);
       setTotalBudget(totalCategoryBudget);
       setTotalSpent(totalCategorySpent);
+      setSavingsGoalProgress(savingsProgress);
       setLoading(false);
 
     } catch (error) {
       console.error('Error processing dashboard data:', error);
       setLoading(false);
     }
-  }, [user, incomeSnapshot, expensesSnapshot, budgetsSnapshot]);
+  }, [user, incomeSnapshot, expensesSnapshot, budgetsSnapshot, goalsSnapshot]);
 
   return {
     balance,
@@ -194,5 +206,6 @@ export const useDashboardData = () => {
     categorySpending,
     totalBudget,
     totalSpent,
+    savingsGoalProgress,
   };
 };

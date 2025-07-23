@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import type { FinancialGoal } from '../../types/goals';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import './GoalForm.css';
 
 interface GoalFormProps {
   goal?: FinancialGoal;
@@ -33,37 +32,47 @@ const GoalForm: React.FC<GoalFormProps> = ({ goal, onSubmit, onCancel }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>{goal ? 'Edit Goal' : 'Create Goal'}</h2>
-        <form onSubmit={handleSubmit} className="goal-form">
-          <Input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Goal Name"
-            required
-          />
-          <Input
-            type="number"
-            value={targetAmount}
-            onChange={(e) => setTargetAmount(e.target.value)}
-            placeholder="Target Amount"
-            required
-          />
-          <Input
-            type="date"
-            value={targetDate}
-            onChange={(e) => setTargetDate(e.target.value)}
-            required
-          />
-          <div className="form-actions">
-            <Button type="submit">{goal ? 'Save Changes' : 'Add Goal'}</Button>
-            <Button type="button" onClick={onCancel} variant="secondary">Cancel</Button>
-          </div>
-        </form>
+    <form onSubmit={handleSubmit} className="modal-form">
+      <div className="modal-field">
+        <Input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Goal Name"
+          required
+        />
       </div>
-    </div>
+      
+      <div className="modal-field">
+        <Input
+          type="number"
+          value={targetAmount}
+          onChange={(e) => setTargetAmount(e.target.value)}
+          placeholder="Target Amount"
+          required
+          step="0.01"
+          min="0"
+        />
+      </div>
+      
+      <div className="modal-field">
+        <Input
+          type="date"
+          value={targetDate}
+          onChange={(e) => setTargetDate(e.target.value)}
+          required
+        />
+      </div>
+      
+      <div className="modal-actions">
+        <Button type="submit" className="btn-primary">
+          {goal ? 'SAVE CHANGES' : 'ADD GOAL'}
+        </Button>
+        <Button type="button" onClick={onCancel} className="btn-secondary">
+          CANCEL
+        </Button>
+      </div>
+    </form>
   );
 };
 

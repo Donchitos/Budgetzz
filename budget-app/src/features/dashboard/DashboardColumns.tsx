@@ -15,6 +15,7 @@ const DashboardColumns: React.FC = () => {
     totalBudget,
     totalSpent,
     lastMonthExpenses,
+    savingsGoalProgress,
   } = useDashboardData();
 
   return (
@@ -41,7 +42,7 @@ const DashboardColumns: React.FC = () => {
           currentExpenses={totalSpent}
           lastMonthExpenses={lastMonthExpenses}
           categorySpending={categorySpending}
-          savingsGoalProgress={0} // This should be calculated based on goals
+          savingsGoalProgress={savingsGoalProgress}
         />
       </div>
     </div>

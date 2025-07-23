@@ -9,8 +9,6 @@ import AddFundsForm from './AddFundsForm';
 import GoalForm from './GoalForm';
 import Modal from '../../components/Modal';
 import './GoalCard.css';
-import './AddFundsForm.css';
-import './GoalForm.css';
 
 const GoalsManager: React.FC = () => {
   const { snapshot, loading, error } = useFirestoreCollection('financial-goals');
@@ -91,6 +89,7 @@ const GoalsManager: React.FC = () => {
       </div>
     );
   }
+  
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -111,6 +110,8 @@ const GoalsManager: React.FC = () => {
           />
         ))}
       </div>
+      
+      {/* Add Funds Modal */}
       <Modal
         isOpen={isAddFundsModalOpen}
         onClose={closeAddFundsModal}
@@ -123,6 +124,8 @@ const GoalsManager: React.FC = () => {
           />
         )}
       </Modal>
+      
+      {/* Create/Edit Goal Modal */}
       <Modal
         isOpen={isGoalFormModalOpen}
         onClose={closeGoalFormModal}

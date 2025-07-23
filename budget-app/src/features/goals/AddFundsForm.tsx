@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import type { FinancialGoal } from '../../types/goals';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import './AddFundsForm.css';
 
 interface AddFundsFormProps {
   onSubmit: (amount: number) => void;
@@ -14,22 +12,32 @@ const AddFundsForm: React.FC<AddFundsFormProps> = ({ onSubmit, onCancel }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(parseFloat(amount));
+    const numericAmount = parseFloat(amount);
+    if (numericAmount > 0) {
+      onSubmit(numericAmount);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="add-funds-form">
-      <Input
-        type="number"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        placeholder="Amount"
-        required
-      />
-      <div className="form-actions">
-        <Button type="submit">Add Funds</Button>
-        <Button type="button" onClick={onCancel} variant="secondary">
-          Cancel
+    <form onSubmit={handleSubmit} className="modal-form">
+      <div className="modal-field">
+        <Input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Amount"
+          required
+          step="0.01"
+          min="0.01"
+        />
+      </div>
+      
+      <div className="modal-actions">
+        <Button type="submit" className="btn-primary">
+          ADD FUNDS
+        </Button>
+        <Button type="button" onClick={onCancel} className="btn-secondary">
+          CANCEL
         </Button>
       </div>
     </form>

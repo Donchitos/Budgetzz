@@ -1,6 +1,7 @@
 // src/types/index.ts
 import { Timestamp } from "firebase/firestore";
-
+export * from './goals';
+ 
 export interface Transaction {
   id: string;
   description: string;
